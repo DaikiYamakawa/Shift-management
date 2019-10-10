@@ -32,3 +32,5 @@ from manager.models import Person, Manager, Worker
 from shift_app.models import Person, Manager, Worker
 ```
 まぁ、普通に考えたら当たり前のことだった。
+
+idが201番以上のデータベースがない
