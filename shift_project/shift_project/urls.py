@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+import shift_app.views as manager_view
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('worker_list/', manager_view.WorkerListView.as_view())
 ]
