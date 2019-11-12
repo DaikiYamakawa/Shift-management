@@ -34,3 +34,7 @@ from shift_app.models import Person, Manager, Worker
 まぁ、普通に考えたら当たり前のことだった。
 
 idが201番以上のデータベースがない
+
+- 今回のではdjangoをAPIサーバとして利用する
+- シリアライズ
+  - 
