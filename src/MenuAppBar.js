@@ -11,14 +11,16 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import { withRouter } from 'react-router';
+import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import PersonIcon from '@material-ui/icons/Accessibility';
-import CreateIcon from '@material-ui/icons/Create'
-import StoreIcon from '@material-ui/icons/Store'
+import CreateIcon from '@material-ui/icons/Create';
+import StoreIcon from '@material-ui/icons/Store';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -63,7 +65,7 @@ const StyledMenuItem = withStyles(theme => ({
   },
 }))(MenuItem);
 
-export default function MenuAppBar() {
+function MenuAppBar(props) {
   const classes = useStyles();
   const [auth, setAuth] = React.useState(true);
   const [anchorEl_icon, setAnchorEl_icon] = React.useState(null);
@@ -88,6 +90,24 @@ export default function MenuAppBar() {
     setAnchorEl_menu(event.currentTarget);
   };
 
+  const handleToShiftPage = () => {
+    props.history.push('/shift')
+    setAnchorEl_icon(null);
+    setAnchorEl_menu(null);
+  }
+
+  const handleToHomePage = () => {
+    props.history.push('/')
+    setAnchorEl_icon(null);
+    setAnchorEl_menu(null);
+  }
+
+  const handleToManagerPage = () => {
+    props.history.push('/manager')
+    setAnchorEl_icon(null);
+    setAnchorEl_menu(null);
+  }
+
   return (
     <div className={classes.root}>
       <FormGroup>
@@ -98,12 +118,11 @@ export default function MenuAppBar() {
       </FormGroup>
       <AppBar position="static">
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu" onClick={handleClick}>
             <MenuIcon
               aria-controls="customized-menu"
               aria-haspopup="true"
               variant="contained"
-              onClick={handleClick}
             />
           </IconButton>
           <StyledMenu
@@ -113,19 +132,19 @@ export default function MenuAppBar() {
             open={open_menu}
             onClose={handleClose}
           >
-            <StyledMenuItem>
+            <StyledMenuItem onClick={handleToHomePage}>
               <ListItemIcon>
                 <PersonIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary="シフト" />
             </StyledMenuItem>
-            <StyledMenuItem>
+            <StyledMenuItem onClick={handleToShiftPage}>
               <ListItemIcon>
                 <CreateIcon fontSize="small" />
               </ListItemIcon>
               <ListItemText primary="シフト提出" />
             </StyledMenuItem>
-            <StyledMenuItem>
+            <StyledMenuItem onClick={handleToManagerPage}>
               <ListItemIcon>
                 <StoreIcon fontSize="small" />
               </ListItemIcon>
@@ -171,3 +190,5 @@ export default function MenuAppBar() {
     </div>
   );
 }
+
+export default withRouter(MenuAppBar)

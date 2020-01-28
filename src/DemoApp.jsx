@@ -58,7 +58,6 @@ export default class DemoApp extends React.Component {
   render() {
     return (
       <div className='demo-app'>
-        <MenuAppBar></MenuAppBar>
         <div className='demo-app-top'>
           {this.renderAuth()}
           <button onClick={this.loginWithGoogle}>
