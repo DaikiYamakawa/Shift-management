@@ -1,11 +1,11 @@
 import React from 'react'
 import MenuAppBar from './MenuAppBar'
 
-export default class Sample extends React.Component {
+export default class Make_Shift extends React.Component {
   render() {
     return (
       <div>
-        <h1>サンプル</h1>
+        <h1>シフト作成</h1>
       </div>
     )
   }
