@@ -8,6 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Container from '@material-ui/core/Container';
+import styled from 'styled-components';
+import MemberList from './MemberList';
 
 const useStyles = makeStyles({
   container: {
@@ -23,7 +25,7 @@ const useStyles = makeStyles({
     fontSize: 14,
   },
   pos: {
-    marginBottom: 12,
+
   },
   box: {
     display: 'inline',
@@ -35,10 +37,25 @@ const useStyles = makeStyles({
   h1: {
     fontFamily: 'Courier',
   },
-  di: {
+  root: {
+    minWidth: '70%',
     display: 'inline-block',
-    margin: '30px',
   },
+  card: {
+    textAlign: 'center',
+  },
+  saveButton: {
+    display: 'block',
+    margin: '0 0 0 auto',
+  },
+  createButton: {
+    display: 'block',
+    margin: '0 auto',
+  },
+  createDiv: {
+    display: 'block',
+    textAlign: 'center',
+  }
 });
 
 export default function Make_Shift() {
@@ -47,37 +64,28 @@ export default function Make_Shift() {
   return (
     <div>
       <div className={classes.box}>
-        <h1 className={classes.h1}>Create Shift</h1>
+        <h1 className={classes.h1}>シフト作成</h1>
       </div>
-      {/* <Card className={classes.card}>
-        <CardContent>
-          <Typography variant="h5" component="h2">
-            未提出者
+      <div className={classes.card}>
+        <Card className={classes.root}>
+          <CardContent>
+            <MemberList />
+          </CardContent>
+          <CardActions>
+            <Button className={classes.saveButton} variant="contained" color="secondary">
+              save
+            </Button>
+          </CardActions>
+        </Card>
+      </div>
+      <div className={classes.createDiv}>
+        <Typography className={classes.pos} color="textSecondary">
+          シフトを作成するには、以下のボタンをクリックして下さい
         </Typography>
-          <ul>
-            <li>秋山諒太</li>
-            <li>その他</li>
-          </ul>
-        </CardContent>
-        <CardActions>
-          <Button size="small"><SaveAltIcon />save</Button>
-        </CardActions>
-      </Card> */}
-      <React.Fragment>
-        <CssBaseline />
-        <Container className={classes.container}>
-          <Typography component="div" style={{ backgroundColor: '#EEEEEE', height: '50vh' }}>
-            <div className={classes.di}>
-              <ul>
-                <li>秋山諒太</li>
-                <li>その他</li>
-              </ul>
-            </div>
-            <Button size="small"><SaveAltIcon />save</Button>
-          </Typography>
-        </Container>
-      </React.Fragment>
-      <Button>Create Shift</Button>
+        <Button className={classes.createButton} variant="contained" color="primary">
+          Create Shift
+      </Button>
+      </div>
     </div>
   );
 }
