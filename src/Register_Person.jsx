@@ -2,21 +2,15 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import SaveAltIcon from '@material-ui/icons/SaveAlt';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Container from '@material-ui/core/Container';
-import styled from 'styled-components';
-import MemberList from './MemberList';
 import CheckBox from './CheckBox';
 import FormDialog from './FormDialog';
-import DelteButton from './DeleteButton';
-import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
-import FaceIcon from '@material-ui/icons/Face';
-import DoneIcon from '@material-ui/icons/Done';
 import PersonIcon from '@material-ui/icons/Person';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 
 const useStyles = makeStyles(theme => ({
@@ -55,8 +49,12 @@ const useStyles = makeStyles(theme => ({
 export default function Register_Person() {
   const classes = useStyles();
 
-  const handleDelete = () => {
+  const handleDelete = (index) => () => {
     console.info('You clicked the delete icon.');
+    console.log(index);
+    const temp = [...personNames];
+    temp.splice(index, 1);
+    setPersonNames(temp);
   };
 
   const handleClick = (name) => () => {
@@ -66,10 +64,23 @@ export default function Register_Person() {
   };
 
   const [person, setPerson] = useState("秋山諒太");
-  const personNames = ['秋山諒太', '山田花子', '立命太郎', '山田孝之', '山田二郎', '山田三郎', '竈門炭治郎', '嘴平伊之助', 'クリスティアーノロナウド'];
+  const [personNames, setPersonNames] = useState(['秋山諒太', '山田花子', '立命太郎', '山田孝之', '山田二郎', '山田三郎', '竈門炭治郎', '嘴平伊之助', 'クリスティアーノロナウド']);
 
   const [edit, setEdit] = useState(false);
-  let editSkill = edit ? <CheckBox /> : <div><h1>仮</h1> <h1>仮</h1> <h1>仮</h1> <h1>仮</h1> <h1>仮</h1> <h1>仮</h1><h1>仮</h1></div>;
+  let editSkill = edit ? <CheckBox /> :
+    <Grid item xs={12} md={6}>
+      <div>
+        <List>
+          {["キャッシャー", "ベーカリー", "ウォッシャー"].map((name, index) =>
+            <ListItem key={index}>
+              <ListItemText
+                primary={name}
+              />
+            </ListItem>
+          )}
+        </List>
+      </div>
+    </Grid>;
   let editButton = edit ?
     <Button variant="outlined" onClick={() => setEdit(!edit)}>編集終了</Button> :
     <Button variant="outlined" onClick={() => setEdit(!edit)}>編集</Button>;
@@ -84,16 +95,16 @@ export default function Register_Person() {
         <Grid item xs={12}>
           <Grid container justify="center" spacing={2}>
             <Grid key={0} item>
-              <FormDialog />
+              <FormDialog props={personNames} onSubmit={setPersonNames} />
               <Paper className={classes.paper_}>
                 <div className={classes.chipGroup}>
-                  {personNames.map(name =>
+                  {personNames.map((name, index) =>
                     <Chip
                       icon={<PersonIcon />}
-                      key={name}
+                      key={index}
                       label={name}
                       onClick={handleClick(name)}
-                      onDelete={handleDelete}
+                      onDelete={handleDelete(index)}
                       className={classes.chip}
                     />)}
                 </div>

@@ -50,7 +50,7 @@ export default function CheckBox() {
             label="ウォッシャー"
           />
         </FormGroup>
-        <FormHelperText>Be careful</FormHelperText>
+        <FormHelperText>編集中</FormHelperText>
       </FormControl>
     </div>
   );
