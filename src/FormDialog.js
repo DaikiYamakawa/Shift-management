@@ -7,10 +7,10 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-export default function FormDialog({ props, onSubmit }) {
+export default function FormDialog(props) {
   const [open, setOpen] = React.useState(false);
   const inputRef = React.useRef(null);
-  const temp = [...props];
+  const temp = [...props.name];
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -22,26 +22,38 @@ export default function FormDialog({ props, onSubmit }) {
 
   const handleSubmit = () => {
     temp.push(inputRef.current.value);
-    onSubmit(temp);
+    props.onSubmit(temp);
     setOpen(false);
   };
+
+  const buttonNames = ["add new member", "add new skill"];
+  let buttonName = buttonNames[props.id];
+
+  const dialogTitles = ["新規アルバイト登録", "新規スキル登録"];
+  let dialogTitle = dialogTitles[props.id];
+
+  const dialogContents = ["新しいアルバイトの名前を記入してください", "新しいスキルを記入してください"];
+  let dialogContent = dialogContents[props.id];
+
+  const labels = ["Name", "Skill"];
+  let label = labels[props.id];
 
   return (
     <div>
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        add new member
+        {buttonName}
       </Button>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">新規アルバイト登録</DialogTitle>
+        <DialogTitle id="form-dialog-title">{dialogTitle}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            新しいアルバイトの名前を記入してください
+            {dialogContent}
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
             id="name"
-            label="Name"
+            label={label}
             type="email"
             fullWidth
             inputRef={inputRef}

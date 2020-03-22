@@ -81,6 +81,7 @@ export default function Register_Person() {
         </List>
       </div>
     </Grid>;
+
   let editButton = edit ?
     <Button variant="outlined" onClick={() => setEdit(!edit)}>編集終了</Button> :
     <Button variant="outlined" onClick={() => setEdit(!edit)}>編集</Button>;
@@ -95,7 +96,7 @@ export default function Register_Person() {
         <Grid item xs={12}>
           <Grid container justify="center" spacing={2}>
             <Grid key={0} item>
-              <FormDialog props={personNames} onSubmit={setPersonNames} />
+              <FormDialog id="0" name={personNames} onSubmit={setPersonNames} />
               <Paper className={classes.paper_}>
                 <div className={classes.chipGroup}>
                   {personNames.map((name, index) =>
