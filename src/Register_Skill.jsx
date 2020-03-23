@@ -61,12 +61,6 @@ export default function Register_slill() {
     setPersonNames(temp);
   };
 
-  const handleClick = (name) => () => {
-    console.info('You clicked the Chip.');
-    console.log(name);
-    setPerson(name);
-  };
-
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -96,6 +90,8 @@ export default function Register_slill() {
     <Button variant="outlined" onClick={() => setEdit(!edit)}>編集</Button>;
 
 
+
+
   return (
     <div className={classes.parent}>
       <div className={classes.box}>
@@ -114,7 +110,6 @@ export default function Register_slill() {
                       icon={<WorkIcon />}
                       key={index}
                       label={name}
-                      onClick={handleClick(name)}
                       onDelete={handleDelete(index)}
                       className={classes.chip}
                     />)}
@@ -124,7 +119,7 @@ export default function Register_slill() {
             <Grid key={1} item>
               {editButton}
               <Paper className={classes.paper_}>
-                <TabPanel />
+                <TabPanel value={editSkill} />
               </Paper>
             </Grid>
           </Grid>
