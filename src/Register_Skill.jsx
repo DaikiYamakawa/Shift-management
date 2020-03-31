@@ -1,18 +1,14 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import CheckBox from './CheckBox';
 import FormDialog from './FormDialog';
 import Chip from '@material-ui/core/Chip';
-import PersonIcon from '@material-ui/icons/Person';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import TabPanel from './TabPanel';
 import WorkIcon from '@material-ui/icons/Work';
 
@@ -50,7 +46,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Register_slill() {
+export default function Register_skill() {
   const classes = useStyles();
 
   const handleDelete = (index) => () => {
@@ -66,6 +62,7 @@ export default function Register_slill() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
 
   const [personNames, setPersonNames] = useState(['キャッシャー', 'ベーカリー', 'ウォッシャー']);
 
