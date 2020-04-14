@@ -12,7 +12,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import TabPanel from './TabPanel';
 import WorkIcon from '@material-ui/icons/Work';
 
-
 const useStyles = makeStyles(theme => ({
   title: {
     fontSize: 14,

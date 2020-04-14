@@ -3,20 +3,19 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CheckBox from './CheckBox';
 import FormDialog from './FormDialog';
-import Chip from '@material-ui/core/Chip';
+import TimeFormDialog from './TimeFormDialog';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import TabPanel from './TabPanel';
-import WorkIcon from '@material-ui/icons/Work';
-import Typography from '@material-ui/core/Typography';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import ShiftPickDateCalendar from './ShiftPickDateCalendar';
+
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -35,20 +34,23 @@ const useStyles = makeStyles(theme => ({
   chip: {
     margin: '10px 50px 10px 50px',
   },
-  parent: {
-    textAlign: 'center'
-  },
   root_: {
     flexGrow: 1,
   },
   paper_: {
-    height: 420,
-    width: 300,
+    height: 350,
+    width: 250,
     overflow: 'scroll',
   },
   chipGroup: {
     overflow: 'scroll'
-  }
+  },
+  paper_calendar: {
+    height: 750,
+    width: 800,
+    display: 'inline-block',
+    marginTop: '10px',
+  },
 }));
 
 export default function Submit_Shift() {
@@ -64,8 +66,14 @@ export default function Submit_Shift() {
 
   const [value, setValue] = React.useState("0");
 
+  const [selectedDate, setSelectedDate] = React.useState(new Date('2020-04-01T21:11:54'));
+
   const handleChange = (event) => {
     setValue(event.target.value);
+  };
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
   };
 
 
@@ -92,7 +100,7 @@ export default function Submit_Shift() {
     <Button variant="outlined" onClick={() => setEdit(!edit)}>編集</Button>;
 
   return (
-    <div className={classes.parent}>
+    <div>
       <div className={classes.box}>
         <h1 className={classes.h1}>シフト提出</h1>
       </div>
@@ -105,11 +113,10 @@ export default function Submit_Shift() {
               <Paper className={classes.paper_}>
                 <div className={classes.chipGroup}>
                   <FormControl component="fieldset">
-                    <FormLabel component="legend">シフトパターン</FormLabel>
+                    <FormLabel component="legend">シフトのベース</FormLabel>
                     <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
                       <FormControlLabel value="0" control={<Radio />} label="休み" />
                       <FormControlLabel value="1" control={<Radio />} label="17:00~L" />
-                      <FormControlLabel value="2" control={<Radio />} label="Other" />
                     </RadioGroup>
                   </FormControl>
                 </div>
@@ -118,6 +125,12 @@ export default function Submit_Shift() {
           </Grid>
         </Grid>
       </Grid>
+
+      <div>
+        <Paper className={classes.paper_calendar}>
+          <ShiftPickDateCalendar name={selectedDate} onSubmit={handleDateChange} />
+        </Paper>
+      </div>
     </div>
   );
 
