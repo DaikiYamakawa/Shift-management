@@ -58,7 +58,7 @@ const useStyles = makeStyles({
   }
 });
 
-export default function Make_Shift() {
+export default function makeShift() {
   const classes = useStyles();
 
   return (

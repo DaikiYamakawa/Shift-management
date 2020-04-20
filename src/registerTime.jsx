@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Register_skill() {
+export default function registerTime() {
   const classes = useStyles();
 
   const handleDelete = (index) => () => {
@@ -92,6 +92,7 @@ export default function Register_skill() {
     <Button variant="outlined" onClick={() => setEditTime(!editTime)}>編集終了</Button> :
     <Button variant="outlined" onClick={() => setEditTime(!editTime)}>編集</Button>;
 
+  //時間用State
   const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
 
   const handleDateChange = (date) => {

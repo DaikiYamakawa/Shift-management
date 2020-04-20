@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import CheckBox from './CheckBox';
 import FormDialog from './FormDialog';
 import Chip from '@material-ui/core/Chip';
+import PersonIcon from '@material-ui/icons/Person';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import TabPanel from './TabPanel';
-import WorkIcon from '@material-ui/icons/Work';
+
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -45,7 +46,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Register_skill() {
+export default function registerPerson() {
   const classes = useStyles();
 
   const handleDelete = (index) => () => {
@@ -56,14 +57,14 @@ export default function Register_skill() {
     setPersonNames(temp);
   };
 
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleClick = (name) => () => {
+    console.info('You clicked the Chip.');
+    console.log(name);
+    setPerson(name);
   };
 
-
-  const [personNames, setPersonNames] = useState(['キャッシャー', 'ベーカリー', 'ウォッシャー']);
+  const [person, setPerson] = useState("秋山諒太");
+  const [personNames, setPersonNames] = useState(['秋山諒太', '山田花子', '立命太郎', '山田孝之', '山田二郎', '山田三郎', '竈門炭治郎', '嘴平伊之助', 'クリスティアーノロナウド']);
 
   const [edit, setEdit] = useState(false);
   let editSkill = edit ? <CheckBox /> :
@@ -85,27 +86,25 @@ export default function Register_skill() {
     <Button variant="outlined" onClick={() => setEdit(!edit)}>編集終了</Button> :
     <Button variant="outlined" onClick={() => setEdit(!edit)}>編集</Button>;
 
-
-
-
   return (
     <div className={classes.parent}>
       <div className={classes.box}>
-        <h1 className={classes.h1}>スキル登録</h1>
+        <h1 className={classes.h1}>アルバイト登録</h1>
       </div>
 
       <Grid container className={classes.root_} spacing={2}>
         <Grid item xs={12}>
           <Grid container justify="center" spacing={2}>
             <Grid key={0} item>
-              <FormDialog id="1" name={personNames} onSubmit={setPersonNames} />
+              <FormDialog id="0" name={personNames} onSubmit={setPersonNames} />
               <Paper className={classes.paper_}>
                 <div className={classes.chipGroup}>
                   {personNames.map((name, index) =>
                     <Chip
-                      icon={<WorkIcon />}
+                      icon={<PersonIcon />}
                       key={index}
                       label={name}
+                      onClick={handleClick(name)}
                       onDelete={handleDelete(index)}
                       className={classes.chip}
                     />)}
@@ -115,7 +114,8 @@ export default function Register_skill() {
             <Grid key={1} item>
               {editButton}
               <Paper className={classes.paper_}>
-                <TabPanel value={editSkill} />
+                <Typography noWrap>{person}さんのスキル</Typography>
+                {editSkill}
               </Paper>
             </Grid>
           </Grid>
@@ -123,5 +123,4 @@ export default function Register_skill() {
       </Grid>
     </div>
   );
-
 }

@@ -18,46 +18,58 @@ import {
 
 // Very rough implementation of multiple date selection
 export default function ShiftPickDateCalendar(props) {
-  const [selectedDates, setSelectedDates] = useState([])
-  const modifiers = {
-    selected: date => selectedDates.some(selectedDate => isSameDay(selectedDate, date))
-  }
+  const [date, setDate] = useState([]);
   const [open, setOpen] = React.useState(false);
 
+  let valueStartTime;
+  let valueEndTime;
+
   const handleClickOpen = date => {
+    let clickedDay = date.getDate();
+    setDate(clickedDay);
+    console.log(clickedDay);
+    console.log(typeof (clickedDay));
+    //Timepickerに渡すデフォルト値
+    valueStartTime = props.shiftStartTimes.clickedDay;
+    valueEndTime = props.shiftEndTimes.clickedDay;
     setOpen(true);
+  };
+
+  const handleStartTimeChange = date => {
+    let day = date.getDate();
+    //props.setShiftStartTimes(({ ...props.shiftStartTimes, [day]: date }));
+    let time = { ...props.shiftStartTimes };
+    time[day] = date;
+    props.setShiftStartTimes(time);
+    console.log(props.shiftStartTimes);
+  };
+
+  const handleEndTimeChange = date => {
+    let day = date.getDate();
+    props.setShiftEndTimes(({ ...props.shiftEndTimes, [day]: date }));
   };
 
   const handleClose = () => {
     setOpen(false);
   };
-  const handleDayClick = date => {
-    if (selectedDates.some(selectedDate => isSameDay(selectedDate, date))) {
-      // クリックされた日付が既に存在していた場合、その日付を配列から取り除き、setSelectedDatesを実行します。
-      setSelectedDates(
-        selectedDates.filter(selectedDate => !isSameDay(selectedDate, date))
-      )
-    } else {
-      // クリックされた日付が既に存在していない場合、今まで通り配列に日付を追加します。
-      setSelectedDates([...selectedDates, date])
-    }
-  }
+
+
   return (
     <div>
-      <Calendar onDayClick={handleClickOpen} modifiers={modifiers} locale={enGB} />
+      <Calendar onDayClick={handleClickOpen} locale={enGB} />
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">●日のシフト希望時間</DialogTitle>
+        <DialogTitle id="form-dialog-title">{date}日のシフト希望時間</DialogTitle>
         <DialogContent>
           <DialogContentText>
             時間を登録してください。
-          </DialogContentText>
+            </DialogContentText>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardTimePicker
               margin="normal"
               id="time-picker"
               label="開始"
-              value={props.name}
-              onChange={props.onSubmit}
+              value={valueStartTime}
+              onChange={handleStartTimeChange}
               KeyboardButtonProps={{
                 'aria-label': 'change time',
               }}
@@ -66,8 +78,8 @@ export default function ShiftPickDateCalendar(props) {
               margin="normal"
               id="time-picker"
               label="終了"
-              value={props.name}
-              onChange={props.onSubmit}
+              value={valueStartTime}
+              onChange={handleEndTimeChange}
               KeyboardButtonProps={{
                 'aria-label': 'change time',
               }}
@@ -78,10 +90,10 @@ export default function ShiftPickDateCalendar(props) {
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
-          </Button>
+            </Button>
           <Button onClick={handleClose} color="primary">
             登録
-          </Button>
+            </Button>
         </DialogActions>
       </Dialog>
     </div>

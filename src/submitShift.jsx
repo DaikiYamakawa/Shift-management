@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
   },
   paper_: {
-    height: 350,
+    height: 100,
     width: 250,
     overflow: 'scroll',
   },
@@ -53,7 +53,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Submit_Shift() {
+export default function submitShift() {
   const classes = useStyles();
 
   const handleDelete = (index) => () => {
@@ -76,8 +76,79 @@ export default function Submit_Shift() {
     setSelectedDate(date);
   };
 
+  //シフト希望開始時間用State
+  const [shiftStartTimes, setShiftStartTimes] = React.useState({
+    1: new Date(),
+    2: new Date(),
+    3: new Date(),
+    4: new Date(),
+    5: new Date(),
+    6: new Date(),
+    7: new Date(),
+    8: new Date(),
+    9: new Date(),
+    10: new Date(),
+    11: new Date(),
+    12: new Date(),
+    13: new Date(),
+    14: new Date(),
+    15: new Date(),
+    16: new Date(),
+    17: new Date(),
+    18: new Date(),
+    19: new Date(),
+    20: new Date(),
+    21: new Date(),
+    22: new Date(),
+    23: new Date(),
+    24: new Date(),
+    25: new Date(),
+    26: new Date(),
+    27: new Date(),
+    28: new Date(),
+    29: new Date(),
+    30: new Date(),
+    31: new Date(),
+  });
 
-  const [personNames, setPersonNames] = useState(['キャッシャー', 'ベーカリー', 'ウォッシャー']);
+  //シフト希望終了時間用State
+  const [shiftEndTimes, setShiftEndTimes] = React.useState({
+    1: new Date(),
+    2: new Date(),
+    3: new Date(),
+    4: new Date(),
+    5: new Date(),
+    6: new Date(),
+    7: new Date(),
+    8: new Date(),
+    9: new Date(),
+    10: new Date(),
+    11: new Date(),
+    12: new Date(),
+    13: new Date(),
+    14: new Date(),
+    15: new Date(),
+    16: new Date(),
+    17: new Date(),
+    18: new Date(),
+    19: new Date(),
+    20: new Date(),
+    21: new Date(),
+    22: new Date(),
+    23: new Date(),
+    24: new Date(),
+    25: new Date(),
+    26: new Date(),
+    27: new Date(),
+    28: new Date(),
+    29: new Date(),
+    30: new Date(),
+    31: new Date(),
+  });
+
+
+  //const [personNames, setPersonNames] = useState(['キャッシャー', 'ベーカリー', 'ウォッシャー']);
+  const [baseTime, setBaseTime] = React.useState('16:00~L');
 
   const [edit, setEdit] = useState(false);
   let editSkill = edit ? <CheckBox /> :
@@ -109,14 +180,14 @@ export default function Submit_Shift() {
         <Grid item xs={12}>
           <Grid container justify="center" spacing={2}>
             <Grid key={0} item>
-              <FormDialog id="1" name={personNames} onSubmit={setPersonNames} />
+              <FormDialog id="2" name={baseTime} onSubmit={setBaseTime} />
               <Paper className={classes.paper_}>
                 <div className={classes.chipGroup}>
                   <FormControl component="fieldset">
                     <FormLabel component="legend">シフトのベース</FormLabel>
                     <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
                       <FormControlLabel value="0" control={<Radio />} label="休み" />
-                      <FormControlLabel value="1" control={<Radio />} label="17:00~L" />
+                      <FormControlLabel value="1" control={<Radio />} label={baseTime} />
                     </RadioGroup>
                   </FormControl>
                 </div>
@@ -128,7 +199,10 @@ export default function Submit_Shift() {
 
       <div>
         <Paper className={classes.paper_calendar}>
-          <ShiftPickDateCalendar name={selectedDate} onSubmit={handleDateChange} />
+          <ShiftPickDateCalendar
+            shiftStartTimes={shiftStartTimes} setShiftStartTimes={setShiftStartTimes}
+            shiftEndTimes={shiftEndTimes} setShiftEndTimes={setShiftEndTimes}
+          />
         </Paper>
       </div>
     </div>

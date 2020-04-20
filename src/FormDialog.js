@@ -21,21 +21,25 @@ export default function FormDialog(props) {
   };
 
   const handleSubmit = () => {
-    temp.push(inputRef.current.value);
-    props.onSubmit(temp);
+    if (props.id == 2) {
+      props.onSubmit(inputRef.current.value);
+    } else {
+      temp.push(inputRef.current.value);
+      props.onSubmit(temp);
+    }
     setOpen(false);
   };
 
-  const buttonNames = ["add new member", "add new skill"];
+  const buttonNames = ["add new member", "add new skill", "add new time"];
   let buttonName = buttonNames[props.id];
 
-  const dialogTitles = ["新規アルバイト登録", "新規スキル登録"];
+  const dialogTitles = ["新規アルバイト登録", "新規スキル登録", "シフトのベース時間帯の登録"];
   let dialogTitle = dialogTitles[props.id];
 
-  const dialogContents = ["新しいアルバイトの名前を記入してください", "新しいスキルを記入してください"];
+  const dialogContents = ["新しいアルバイトの名前を記入してください", "新しいスキルを記入してください", "新しい時間帯を登録してください"];
   let dialogContent = dialogContents[props.id];
 
-  const labels = ["Name", "Skill"];
+  const labels = ["Name", "Skill", "Time"];
   let label = labels[props.id];
 
   return (
