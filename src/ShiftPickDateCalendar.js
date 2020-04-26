@@ -46,7 +46,8 @@ export default function ShiftPickDateCalendar(props) {
 
   const handleEndTimeChange = date => {
     let day = date.getDate();
-    props.setShiftEndTimes(({ ...props.shiftEndTimes, [day]: date }));
+    props.setShiftEndTimes(({ ...props.shiftEndTimes, day: date }));
+    console.log(props.shiftEndTimes);
   };
 
   const handleClose = () => {

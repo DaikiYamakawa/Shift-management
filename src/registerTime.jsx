@@ -96,6 +96,7 @@ export default function registerTime() {
   const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
 
   const handleDateChange = (date) => {
+    console.log(date)
     setSelectedDate(date);
   };
 

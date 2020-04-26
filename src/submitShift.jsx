@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import CheckBox from './CheckBox';
-import FormDialog from './FormDialog';
+import FormTimeDialog from './FormTimeDialog';
 import TimeFormDialog from './TimeFormDialog';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -148,7 +148,7 @@ export default function submitShift() {
 
 
   //const [personNames, setPersonNames] = useState(['キャッシャー', 'ベーカリー', 'ウォッシャー']);
-  const [baseTime, setBaseTime] = React.useState('16:00~L');
+  const [baseTime, setBaseTime] = React.useState({ 'start': new Date('2020-04-26T10:00:00'), 'end': new Date('2020-04-26T18:00:00') });
 
   const [edit, setEdit] = useState(false);
   let editSkill = edit ? <CheckBox /> :
@@ -170,6 +170,9 @@ export default function submitShift() {
     <Button variant="outlined" onClick={() => setEdit(!edit)}>編集終了</Button> :
     <Button variant="outlined" onClick={() => setEdit(!edit)}>編集</Button>;
 
+  let baseTimeLabel = `${baseTime['start'].getHours() < 10 ? "0" + baseTime['start'].getHours() : baseTime['start'].getHours()}:${baseTime['start'].getMinutes() < 10 ? "0" + baseTime['start'].getMinutes() : baseTime['start'].getMinutes()}~${baseTime['end'].getHours() < 10 ? "0" + baseTime['end'].getHours() : baseTime['end'].getHours()}:${baseTime['end'].getMinutes() < 10 ? "0" + baseTime['end'].getMinutes() : baseTime['end'].getMinutes()}`
+
+
   return (
     <div>
       <div className={classes.box}>
@@ -180,14 +183,14 @@ export default function submitShift() {
         <Grid item xs={12}>
           <Grid container justify="center" spacing={2}>
             <Grid key={0} item>
-              <FormDialog id="2" name={baseTime} onSubmit={setBaseTime} />
+              <FormTimeDialog time={baseTime} onSubmit={setBaseTime} />
               <Paper className={classes.paper_}>
                 <div className={classes.chipGroup}>
                   <FormControl component="fieldset">
                     <FormLabel component="legend">シフトのベース</FormLabel>
                     <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
                       <FormControlLabel value="0" control={<Radio />} label="休み" />
-                      <FormControlLabel value="1" control={<Radio />} label={baseTime} />
+                      <FormControlLabel value="1" control={<Radio />} label={baseTimeLabel} />
                     </RadioGroup>
                   </FormControl>
                 </div>
