@@ -66,7 +66,7 @@ export default function submitShift() {
 
   const [value, setValue] = React.useState("0");
 
-  const [selectedDate, setSelectedDate] = React.useState(new Date('2020-04-01T21:11:54'));
+  const [selectedDate, setSelectedDate] = React.useState(new Date('2020-04-01T10:00:54'));
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -77,98 +77,79 @@ export default function submitShift() {
   };
 
   //シフト希望開始時間用State
-  const [shiftStartTimes, setShiftStartTimes] = React.useState({
-    1: new Date(),
-    2: new Date(),
-    3: new Date(),
-    4: new Date(),
-    5: new Date(),
-    6: new Date(),
-    7: new Date(),
-    8: new Date(),
-    9: new Date(),
-    10: new Date(),
-    11: new Date(),
-    12: new Date(),
-    13: new Date(),
-    14: new Date(),
-    15: new Date(),
-    16: new Date(),
-    17: new Date(),
-    18: new Date(),
-    19: new Date(),
-    20: new Date(),
-    21: new Date(),
-    22: new Date(),
-    23: new Date(),
-    24: new Date(),
-    25: new Date(),
-    26: new Date(),
-    27: new Date(),
-    28: new Date(),
-    29: new Date(),
-    30: new Date(),
-    31: new Date(),
-  });
+  const [shiftStartTimes, setShiftStartTimes] = React.useState([
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+  ]);
 
   //シフト希望終了時間用State
-  const [shiftEndTimes, setShiftEndTimes] = React.useState({
-    1: new Date(),
-    2: new Date(),
-    3: new Date(),
-    4: new Date(),
-    5: new Date(),
-    6: new Date(),
-    7: new Date(),
-    8: new Date(),
-    9: new Date(),
-    10: new Date(),
-    11: new Date(),
-    12: new Date(),
-    13: new Date(),
-    14: new Date(),
-    15: new Date(),
-    16: new Date(),
-    17: new Date(),
-    18: new Date(),
-    19: new Date(),
-    20: new Date(),
-    21: new Date(),
-    22: new Date(),
-    23: new Date(),
-    24: new Date(),
-    25: new Date(),
-    26: new Date(),
-    27: new Date(),
-    28: new Date(),
-    29: new Date(),
-    30: new Date(),
-    31: new Date(),
-  });
+  const [shiftEndTimes, setShiftEndTimes] = React.useState([
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+    new Date('2020-04-01T10:00:54'),
+  ]);
 
 
   //const [personNames, setPersonNames] = useState(['キャッシャー', 'ベーカリー', 'ウォッシャー']);
   const [baseTime, setBaseTime] = React.useState({ 'start': new Date('2020-04-26T10:00:00'), 'end': new Date('2020-04-26T18:00:00') });
 
-  const [edit, setEdit] = useState(false);
-  let editSkill = edit ? <CheckBox /> :
-    <Grid item xs={12} md={6}>
-      <div>
-        <List>
-          {["キャッシャー", "ベーカリー", "ウォッシャー"].map((name, index) =>
-            <ListItem key={index}>
-              <ListItemText
-                primary={name}
-              />
-            </ListItem>
-          )}
-        </List>
-      </div>
-    </Grid>;
-
-  let editButton = edit ?
-    <Button variant="outlined" onClick={() => setEdit(!edit)}>編集終了</Button> :
-    <Button variant="outlined" onClick={() => setEdit(!edit)}>編集</Button>;
 
   let baseTimeLabel = `${baseTime['start'].getHours() < 10 ? "0" + baseTime['start'].getHours() : baseTime['start'].getHours()}:${baseTime['start'].getMinutes() < 10 ? "0" + baseTime['start'].getMinutes() : baseTime['start'].getMinutes()}~${baseTime['end'].getHours() < 10 ? "0" + baseTime['end'].getHours() : baseTime['end'].getHours()}:${baseTime['end'].getMinutes() < 10 ? "0" + baseTime['end'].getMinutes() : baseTime['end'].getMinutes()}`
 

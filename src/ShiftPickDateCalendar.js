@@ -20,37 +20,50 @@ import {
 export default function ShiftPickDateCalendar(props) {
   const [date, setDate] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [tempStart, setTempStart] = React.useState([...props.shiftStartTimes]);
+  const [tempEnd, setTempEnd] = React.useState([...props.shiftEndTimes]);
 
-  let valueStartTime;
-  let valueEndTime;
+  var valueStartTime;
+  var valueEndTime;
 
   const handleClickOpen = date => {
     let clickedDay = date.getDate();
     setDate(clickedDay);
-    console.log(clickedDay);
-    console.log(typeof (clickedDay));
+
     //Timepickerに渡すデフォルト値
-    valueStartTime = props.shiftStartTimes.clickedDay;
-    valueEndTime = props.shiftEndTimes.clickedDay;
+    valueStartTime = tempStart[clickedDay - 1];
+    valueEndTime = tempEnd[clickedDay - 1];
     setOpen(true);
   };
 
   const handleStartTimeChange = date => {
     let day = date.getDate();
     //props.setShiftStartTimes(({ ...props.shiftStartTimes, [day]: date }));
-    let time = { ...props.shiftStartTimes };
-    time[day] = date;
-    props.setShiftStartTimes(time);
-    console.log(props.shiftStartTimes);
+    let temp = [...props.shiftStartTimes];
+    temp[day - 1] = date;
+    setTempStart(temp);
+    //props.setShiftStartTimes(time);
+    //console.log(props.shiftStartTimes);
   };
 
   const handleEndTimeChange = date => {
     let day = date.getDate();
-    props.setShiftEndTimes(({ ...props.shiftEndTimes, day: date }));
-    console.log(props.shiftEndTimes);
+    let temp = [...props.shiftEndTimes];
+    temp[day - 1] = date;
+    setTempEnd(temp);
+    //props.setShiftEndTimes(({ ...props.shiftEndTimes, day: date }));
+    //console.log(props.shiftEndTimes);
+  };
+
+  const handleSubmit = () => {
+    props.setShiftStartTimes(tempStart);
+    props.setShiftEndTimes(tempEnd);
+    setOpen(false);
   };
 
   const handleClose = () => {
+    setTempStart(...props.shiftStartTimes);
+    setTempEnd(...props.shiftEndTimes);
     setOpen(false);
   };
 
@@ -79,7 +92,7 @@ export default function ShiftPickDateCalendar(props) {
               margin="normal"
               id="time-picker"
               label="終了"
-              value={valueStartTime}
+              value={valueEndTime}
               onChange={handleEndTimeChange}
               KeyboardButtonProps={{
                 'aria-label': 'change time',
@@ -92,7 +105,7 @@ export default function ShiftPickDateCalendar(props) {
           <Button onClick={handleClose} color="primary">
             Cancel
             </Button>
-          <Button onClick={handleClose} color="primary">
+          <Button onClick={handleSubmit} color="primary">
             登録
             </Button>
         </DialogActions>

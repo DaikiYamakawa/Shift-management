@@ -27,7 +27,7 @@ export default function FormTimeDialog(props) {
   const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
-  const inputRef = React.useRef(null);
+  const [temp, setTemp] = React.useState({ ...props.time });
 
   /**
   * バリデーション用state
@@ -41,7 +41,7 @@ export default function FormTimeDialog(props) {
 
   const dialogContent = ["新しい時間帯を登録してください"];
 
-  let temp = { ...props.time };
+  //let temp = { ...props.time };
 
 
   const handleClickOpen = () => {
@@ -49,6 +49,7 @@ export default function FormTimeDialog(props) {
   };
 
   const handleClose = () => {
+    setTemp({ ...temp, 'start': props.time['start'], 'end': props.time['end'] });
     setOpen(false);
   };
 
@@ -58,15 +59,11 @@ export default function FormTimeDialog(props) {
   };
 
   const handleStartTimeChange = (time) => {
-    console.log(time);
-    temp['start'] = time;
-    //props.onSubmit({ ...props.time, 'start': time });
+    setTemp({ ...temp, 'start': time });
   };
 
   const handleEndTimeChange = (time) => {
-    console.log(time);
-    temp['end'] = time;
-    //props.onSubmit({ ...props.time, 'end': time });
+    setTemp({ ...temp, 'end': time });
   };
 
 
@@ -87,7 +84,7 @@ export default function FormTimeDialog(props) {
                 margin="normal"
                 id="time-picker"
                 label="start"
-                value={props.time['start']}
+                value={temp['start']}
                 onChange={handleStartTimeChange}
                 KeyboardButtonProps={{
                   'aria-label': 'change time',
@@ -97,7 +94,7 @@ export default function FormTimeDialog(props) {
                 margin="normal"
                 id="time-picker"
                 label="end"
-                value={props.time['end']}
+                value={temp['end']}
                 onChange={handleEndTimeChange}
                 KeyboardButtonProps={{
                   'aria-label': 'change time',
