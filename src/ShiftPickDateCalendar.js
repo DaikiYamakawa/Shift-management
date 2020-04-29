@@ -18,52 +18,48 @@ import {
 
 // Very rough implementation of multiple date selection
 export default function ShiftPickDateCalendar(props) {
-  const [date, setDate] = useState([]);
+  const [pickedDate, setPickedDate] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [tempStart, setTempStart] = React.useState([...props.shiftStartTimes]);
   const [tempEnd, setTempEnd] = React.useState([...props.shiftEndTimes]);
 
-  var valueStartTime;
-  var valueEndTime;
+  const [valueStartTime, setValueStartTime] = React.useState(new Date('2020-04-02T11:00:54'));
+  const [valueEndTime, setValueEndTime] = React.useState(new Date('2020-04-01T11:00:54'));
+
 
   const handleClickOpen = date => {
-    let clickedDay = date.getDate();
-    setDate(clickedDay);
+    let day = date.getDate();
+    setPickedDate(day);
 
     //Timepickerに渡すデフォルト値
-    valueStartTime = tempStart[clickedDay - 1];
-    valueEndTime = tempEnd[clickedDay - 1];
+    setValueStartTime(props.shiftStartTimes[day - 1]);
+    setValueEndTime(props.shiftEndTimes[day - 1]);
     setOpen(true);
   };
 
   const handleStartTimeChange = date => {
-    let day = date.getDate();
-    //props.setShiftStartTimes(({ ...props.shiftStartTimes, [day]: date }));
     let temp = [...props.shiftStartTimes];
-    temp[day - 1] = date;
-    setTempStart(temp);
-    //props.setShiftStartTimes(time);
-    //console.log(props.shiftStartTimes);
+    temp[pickedDate - 1] = date;
+    setTempStart([...temp]);
+    setValueStartTime(date);
   };
 
   const handleEndTimeChange = date => {
-    let day = date.getDate();
     let temp = [...props.shiftEndTimes];
-    temp[day - 1] = date;
-    setTempEnd(temp);
-    //props.setShiftEndTimes(({ ...props.shiftEndTimes, day: date }));
-    //console.log(props.shiftEndTimes);
+    temp[pickedDate - 1] = date;
+    setTempEnd([...temp]);
+    setValueEndTime(date);
   };
 
   const handleSubmit = () => {
-    props.setShiftStartTimes(tempStart);
-    props.setShiftEndTimes(tempEnd);
+    props.setShiftStartTimes([...tempStart]);
+    props.setShiftEndTimes([...tempEnd]);
     setOpen(false);
   };
 
   const handleClose = () => {
-    setTempStart(...props.shiftStartTimes);
-    setTempEnd(...props.shiftEndTimes);
+    setTempStart([...props.shiftStartTimes]);
+    setTempEnd([...props.shiftEndTimes]);
     setOpen(false);
   };
 
@@ -72,7 +68,7 @@ export default function ShiftPickDateCalendar(props) {
     <div>
       <Calendar onDayClick={handleClickOpen} locale={enGB} />
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">{date}日のシフト希望時間</DialogTitle>
+        <DialogTitle id="form-dialog-title">{pickedDate}日のシフト希望時間</DialogTitle>
         <DialogContent>
           <DialogContentText>
             時間を登録してください。
@@ -80,7 +76,7 @@ export default function ShiftPickDateCalendar(props) {
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardTimePicker
               margin="normal"
-              id="time-picker"
+              id="start"
               label="開始"
               value={valueStartTime}
               onChange={handleStartTimeChange}
@@ -90,7 +86,7 @@ export default function ShiftPickDateCalendar(props) {
             />
             <KeyboardTimePicker
               margin="normal"
-              id="time-picker"
+              id="end"
               label="終了"
               value={valueEndTime}
               onChange={handleEndTimeChange}
