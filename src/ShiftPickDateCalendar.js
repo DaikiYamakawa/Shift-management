@@ -15,9 +15,20 @@ import {
   KeyboardTimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  validation: {
+    color: 'red',
+  },
+
+}));
 
 // Very rough implementation of multiple date selection
 export default function ShiftPickDateCalendar(props) {
+  const classes = useStyles();
+
+
   const [pickedDate, setPickedDate] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [tempStart, setTempStart] = React.useState([...props.shiftStartTimes]);
@@ -25,6 +36,8 @@ export default function ShiftPickDateCalendar(props) {
 
   const [valueStartTime, setValueStartTime] = React.useState(new Date('2020-04-02T11:00:54'));
   const [valueEndTime, setValueEndTime] = React.useState(new Date('2020-04-01T11:00:54'));
+
+  const [validated, setValidated] = React.useState(true);
 
 
   const handleClickOpen = date => {
@@ -38,31 +51,51 @@ export default function ShiftPickDateCalendar(props) {
   };
 
   const handleStartTimeChange = date => {
+    setValueStartTime(date);
     let temp = [...props.shiftStartTimes];
     temp[pickedDate - 1] = date;
     setTempStart([...temp]);
-    setValueStartTime(date);
+    if (tempEnd[pickedDate - 1].getHours() - date.getHours() < 0) {
+      setValidated(false);
+    } else {
+      setValidated(true);
+    }
+
   };
 
   const handleEndTimeChange = date => {
+    setValueEndTime(date);
     let temp = [...props.shiftEndTimes];
     temp[pickedDate - 1] = date;
     setTempEnd([...temp]);
-    setValueEndTime(date);
+    if (date.getHours() - tempStart[pickedDate - 1].getHours() < 0) {
+      setValidated(false);
+    } else {
+      setValidated(true);
+    }
   };
 
   const handleSubmit = () => {
     props.setShiftStartTimes([...tempStart]);
     props.setShiftEndTimes([...tempEnd]);
     setOpen(false);
+
   };
 
   const handleClose = () => {
     setTempStart([...props.shiftStartTimes]);
     setTempEnd([...props.shiftEndTimes]);
     setOpen(false);
+    setValidated(true);
   };
 
+  var button = validated ?
+    <Button onClick={handleSubmit} color="primary">登録</Button> :
+    <Button disabled color="primary">登録</Button>;
+
+  var err = validated ?
+    <p></p> :
+    <p className={classes.validation}>有効な時間を入力して下さい.</p>;
 
   return (
     <div>
@@ -77,7 +110,7 @@ export default function ShiftPickDateCalendar(props) {
             <KeyboardTimePicker
               margin="normal"
               id="start"
-              label="開始"
+              label="start"
               value={valueStartTime}
               onChange={handleStartTimeChange}
               KeyboardButtonProps={{
@@ -87,23 +120,23 @@ export default function ShiftPickDateCalendar(props) {
             <KeyboardTimePicker
               margin="normal"
               id="end"
-              label="終了"
+              label="end"
               value={valueEndTime}
               onChange={handleEndTimeChange}
               KeyboardButtonProps={{
                 'aria-label': 'change time',
               }}
             />
+
           </MuiPickersUtilsProvider>
+          {err}
 
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
             </Button>
-          <Button onClick={handleSubmit} color="primary">
-            登録
-            </Button>
+          {button}
         </DialogActions>
       </Dialog>
     </div>

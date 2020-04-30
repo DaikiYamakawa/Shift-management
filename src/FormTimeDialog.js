@@ -28,6 +28,7 @@ export default function FormTimeDialog(props) {
 
   const [open, setOpen] = React.useState(false);
   const [temp, setTemp] = React.useState({ ...props.time });
+  const [validated, setValidated] = React.useState(true);
 
   /**
   * バリデーション用state
@@ -51,6 +52,7 @@ export default function FormTimeDialog(props) {
   const handleClose = () => {
     setTemp({ ...temp, 'start': props.time['start'], 'end': props.time['end'] });
     setOpen(false);
+    setValidated(true);
   };
 
   const handleSubmit = () => {
@@ -60,11 +62,29 @@ export default function FormTimeDialog(props) {
 
   const handleStartTimeChange = (time) => {
     setTemp({ ...temp, 'start': time });
+    if (temp['end'].getHours() - time.getHours() < 0) {
+      setValidated(false);
+    } else {
+      setValidated(true);
+    }
   };
 
   const handleEndTimeChange = (time) => {
     setTemp({ ...temp, 'end': time });
+    if (time.getHours() - temp['start'].getHours() < 0) {
+      setValidated(false);
+    } else {
+      setValidated(true);
+    }
   };
+
+  var button = validated ?
+    <Button onClick={handleSubmit} color="primary">登録</Button> :
+    <Button disabled color="primary">登録</Button>;
+
+  var err = validated ?
+    <p></p> :
+    <p className={classes.validation}>有効な時間を入力して下さい.</p>;
 
 
   return (
@@ -82,7 +102,7 @@ export default function FormTimeDialog(props) {
             <Grid container justify="space-around">
               <KeyboardTimePicker
                 margin="normal"
-                id="time-picker"
+                id="start"
                 label="start"
                 value={temp['start']}
                 onChange={handleStartTimeChange}
@@ -92,7 +112,7 @@ export default function FormTimeDialog(props) {
               />
               <KeyboardTimePicker
                 margin="normal"
-                id="time-picker"
+                id="end"
                 label="end"
                 value={temp['end']}
                 onChange={handleEndTimeChange}
@@ -102,12 +122,13 @@ export default function FormTimeDialog(props) {
               />
             </Grid>
           </MuiPickersUtilsProvider>
+          {err}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleSubmit} color="primary">OK</Button>
+          {button}
         </DialogActions>
       </Dialog>
     </div>
