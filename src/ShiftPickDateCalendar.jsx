@@ -1,46 +1,44 @@
-import React, { useState } from 'react'
-import { isSameDay } from 'date-fns'
-import { enGB } from 'date-fns/locale'
-import { Calendar } from 'react-nice-dates'
-import 'react-nice-dates/build/style.css'
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DateFnsUtils from '@date-io/date-fns';
+import React, { useState } from "react";
+import { isSameDay } from "date-fns";
+import { enGB } from "date-fns/locale";
+import { Calendar } from "react-nice-dates";
+import "react-nice-dates/build/style.css";
+import Button from "@material-ui/core/Button";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import DateFnsUtils from "@date-io/date-fns";
 import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
   KeyboardDatePicker,
-} from '@material-ui/pickers';
-import { makeStyles } from '@material-ui/core/styles';
+} from "@material-ui/pickers";
+import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   validation: {
-    color: 'red',
+    color: "red",
   },
-
 }));
 
 // Very rough implementation of multiple date selection
 export default function ShiftPickDateCalendar(props) {
   const classes = useStyles();
 
-
   const [pickedDate, setPickedDate] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [tempStart, setTempStart] = React.useState([...props.shiftStartTimes]);
   const [tempEnd, setTempEnd] = React.useState([...props.shiftEndTimes]);
 
-  const [valueStartTime, setValueStartTime] = React.useState(new Date('2020-04-02T11:00:54'));
-  const [valueEndTime, setValueEndTime] = React.useState(new Date('2020-04-01T11:00:54'));
+  const [valueStartTime, setValueStartTime] = React.useState(new Date("2020-04-02T11:00:54"));
+  const [valueEndTime, setValueEndTime] = React.useState(new Date("2020-04-01T11:00:54"));
 
   const [validated, setValidated] = React.useState(true);
 
 
-  const handleClickOpen = date => {
+  const handleClickOpen = (date) => {
     let day = date.getDate();
     setPickedDate(day);
 
@@ -79,7 +77,6 @@ export default function ShiftPickDateCalendar(props) {
     props.setShiftStartTimes([...tempStart]);
     props.setShiftEndTimes([...tempEnd]);
     setOpen(false);
-
   };
 
   const handleClose = () => {
@@ -103,9 +100,7 @@ export default function ShiftPickDateCalendar(props) {
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">{pickedDate}日のシフト希望時間</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            時間を登録してください。
-            </DialogContentText>
+          <DialogContentText>時間を登録してください。</DialogContentText>
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardTimePicker
               margin="normal"
@@ -114,7 +109,7 @@ export default function ShiftPickDateCalendar(props) {
               value={valueStartTime}
               onChange={handleStartTimeChange}
               KeyboardButtonProps={{
-                'aria-label': 'change time',
+                "aria-label": "change time",
               }}
             />
             <KeyboardTimePicker
@@ -124,21 +119,19 @@ export default function ShiftPickDateCalendar(props) {
               value={valueEndTime}
               onChange={handleEndTimeChange}
               KeyboardButtonProps={{
-                'aria-label': 'change time',
+                "aria-label": "change time",
               }}
             />
-
           </MuiPickersUtilsProvider>
           {err}
-
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
-            </Button>
+          </Button>
           {button}
         </DialogActions>
       </Dialog>
     </div>
-  )
+  );
 }

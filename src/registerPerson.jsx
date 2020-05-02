@@ -1,56 +1,68 @@
-import React, { useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import CheckBox from './CheckBox';
-import FormDialog from './FormDialog';
-import Chip from '@material-ui/core/Chip';
-import PersonIcon from '@material-ui/icons/Person';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import React, { useState } from "react"
+import { makeStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import CheckBox from "./CheckBox";
+import FormDialog from "./FormDialog";
+import Chip from "@material-ui/core/Chip";
+import PersonIcon from "@material-ui/icons/Person";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 
-
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   title: {
     fontSize: 14,
   },
   box: {
-    display: 'inline',
-    padding: '0.5em 1em',
-    margin: '2em 0',
-    fontWeight: 'bold',
-    textAlign: 'center',
+    display: "inline",
+    padding: "0.5em 1em",
+    margin: "2em 0",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   h1: {
-    fontFamily: 'Courier',
+    fontFamily: "Courier",
   },
   chip: {
-    margin: '10px 50px 10px 50px',
+    margin: "10px 50px 10px 50px",
   },
   parent: {
-    textAlign: 'center'
+    textAlign: "center",
   },
-  root_: {
+  root: {
     flexGrow: 1,
   },
-  paper_: {
+  paper: {
     height: 420,
     width: 300,
-    overflow: 'scroll',
+    overflow: "scroll",
   },
   chipGroup: {
-    overflow: 'scroll'
-  }
+    overflow: "scroll",
+  },
 }));
 
 export default function registerPerson() {
   const classes = useStyles();
 
+  const [person, setPerson] = useState("秋山諒太");
+  const [personNames, setPersonNames] = useState([
+    "秋山諒太",
+    "山田花子",
+    "立命太郎",
+    "山田孝之",
+    "山田二郎",
+    "山田三郎",
+    "竈門炭治郎",
+    "嘴平伊之助",
+    "クリスティアーノロナウド",
+  ]);
+
   const handleDelete = (index) => () => {
-    console.info('You clicked the delete icon.');
+    console.info("You clicked the delete icon.");
     console.log(index);
     const temp = [...personNames];
     temp.splice(index, 1);
@@ -58,33 +70,37 @@ export default function registerPerson() {
   };
 
   const handleClick = (name) => () => {
-    console.info('You clicked the Chip.');
+    console.info("You clicked the Chip.");
     console.log(name);
     setPerson(name);
   };
 
-  const [person, setPerson] = useState("秋山諒太");
-  const [personNames, setPersonNames] = useState(['秋山諒太', '山田花子', '立命太郎', '山田孝之', '山田二郎', '山田三郎', '竈門炭治郎', '嘴平伊之助', 'クリスティアーノロナウド']);
-
   const [edit, setEdit] = useState(false);
-  let editSkill = edit ? <CheckBox /> :
+  const editSkill = edit ? (
+    <CheckBox />
+  ) : (
     <Grid item xs={12} md={6}>
       <div>
         <List>
-          {["キャッシャー", "ベーカリー", "ウォッシャー"].map((name, index) =>
+          {["キャッシャー", "ベーカリー", "ウォッシャー"].map((name, index) => (
             <ListItem key={index}>
-              <ListItemText
-                primary={name}
-              />
+              <ListItemText primary={name} />
             </ListItem>
-          )}
+          ))}
         </List>
       </div>
-    </Grid>;
+    </Grid>
+  );
 
-  let editButton = edit ?
-    <Button variant="outlined" onClick={() => setEdit(!edit)}>編集終了</Button> :
-    <Button variant="outlined" onClick={() => setEdit(!edit)}>編集</Button>;
+  const editButton = edit ? (
+    <Button variant="outlined" onClick={() => setEdit(!edit)}>
+      編集終了
+    </Button>
+  ) : (
+    <Button variant="outlined" onClick={() => setEdit(!edit)}>
+      編集
+    </Button>
+  );
 
   return (
     <div className={classes.parent}>
@@ -92,14 +108,14 @@ export default function registerPerson() {
         <h1 className={classes.h1}>アルバイト登録</h1>
       </div>
 
-      <Grid container className={classes.root_} spacing={2}>
+      <Grid container className={classes.root} spacing={2}>
         <Grid item xs={12}>
           <Grid container justify="center" spacing={2}>
             <Grid key={0} item>
               <FormDialog id="0" name={personNames} onSubmit={setPersonNames} />
-              <Paper className={classes.paper_}>
+              <Paper className={classes.paper}>
                 <div className={classes.chipGroup}>
-                  {personNames.map((name, index) =>
+                  {personNames.map((name, index) => (
                     <Chip
                       icon={<PersonIcon />}
                       key={index}
@@ -107,13 +123,14 @@ export default function registerPerson() {
                       onClick={handleClick(name)}
                       onDelete={handleDelete(index)}
                       className={classes.chip}
-                    />)}
+                    />
+                  ))}
                 </div>
               </Paper>
             </Grid>
             <Grid key={1} item>
               {editButton}
-              <Paper className={classes.paper_}>
+              <Paper className={classes.paper}>
                 <Typography noWrap>{person}さんのスキル</Typography>
                 {editSkill}
               </Paper>
