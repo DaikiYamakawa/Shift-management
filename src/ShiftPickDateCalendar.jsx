@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { isSameDay } from "date-fns";
 import { enGB } from "date-fns/locale";
 import { Calendar } from "react-nice-dates";
 import "react-nice-dates/build/style.css";
@@ -10,11 +9,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
+import { MuiPickersUtilsProvider, KeyboardTimePicker, KeyboardDatePicker } from "@material-ui/pickers";
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles(() => ({
@@ -37,20 +32,19 @@ export default function ShiftPickDateCalendar(props) {
 
   const [validated, setValidated] = React.useState(true);
 
-
   const handleClickOpen = (date) => {
-    let day = date.getDate();
+    const day = date.getDate();
     setPickedDate(day);
 
-    //Timepickerに渡すデフォルト値
+    // Timepickerに渡すデフォルト値
     setValueStartTime(props.shiftStartTimes[day - 1]);
     setValueEndTime(props.shiftEndTimes[day - 1]);
     setOpen(true);
   };
 
-  const handleStartTimeChange = date => {
+  const handleStartTimeChange = (date) => {
     setValueStartTime(date);
-    let temp = [...props.shiftStartTimes];
+    const temp = [...props.shiftStartTimes];
     temp[pickedDate - 1] = date;
     setTempStart([...temp]);
     if (tempEnd[pickedDate - 1].getHours() - date.getHours() < 0) {
@@ -58,12 +52,11 @@ export default function ShiftPickDateCalendar(props) {
     } else {
       setValidated(true);
     }
-
   };
 
-  const handleEndTimeChange = date => {
+  const handleEndTimeChange = (date) => {
     setValueEndTime(date);
-    let temp = [...props.shiftEndTimes];
+    const temp = [...props.shiftEndTimes];
     temp[pickedDate - 1] = date;
     setTempEnd([...temp]);
     if (date.getHours() - tempStart[pickedDate - 1].getHours() < 0) {
@@ -86,13 +79,17 @@ export default function ShiftPickDateCalendar(props) {
     setValidated(true);
   };
 
-  var button = validated ?
-    <Button onClick={handleSubmit} color="primary">登録</Button> :
-    <Button disabled color="primary">登録</Button>;
+  const button = validated ? (
+    <Button onClick={handleSubmit} color="primary">
+      登録
+    </Button>
+  ) : (
+    <Button disabled color="primary">
+      登録
+    </Button>
+  );
 
-  var err = validated ?
-    <p></p> :
-    <p className={classes.validation}>有効な時間を入力して下さい.</p>;
+  const err = validated ? <p /> : <p className={classes.validation}>有効な時間を入力して下さい.</p>;
 
   return (
     <div>
