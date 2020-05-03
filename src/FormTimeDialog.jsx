@@ -27,12 +27,13 @@ export default function FormTimeDialog(props) {
   const [open, setOpen] = React.useState(false);
   const [temp, setTemp] = React.useState({ ...props.time });
   const [validated, setValidated] = React.useState(true);
+  const DAYS = 31;
 
   const buttonName = ["add new time"];
 
   const dialogTitle = ["シフトのベース時間帯の登録"];
 
-  const dialogContent = ["新しい時間帯を登録してくださいいい"];
+  const dialogContent = ["新しい時間帯を登録してください"];
 
   const handleClickOpen = () => {
     setOpen(true);
