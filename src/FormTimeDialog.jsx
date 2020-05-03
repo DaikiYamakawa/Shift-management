@@ -32,20 +32,34 @@ export default function FormTimeDialog(props) {
 
   const dialogTitle = ["シフトのベース時間帯の登録"];
 
-  const dialogContent = ["新しい時間帯を登録してください"];
+  const dialogContent = ["新しい時間帯を登録してくださいいい"];
 
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
-    setTemp({ ...temp, start: props.time["start"], end: props.time["end"] });
+    setTemp({ ...temp, start: props.time.start, end: props.time.end });
     setOpen(false);
     setValidated(true);
   };
 
   const handleSubmit = () => {
+    console.log("OK!");
     props.onSubmit(temp);
+    console.log(props.radio);
+    if (props.radio === "1") {
+      let tempStart = [];
+      let tempEnd = [];
+      for (let i = 0; i < DAYS; i++) {
+        tempStart[i] = temp.start;
+      }
+      for (let i = 0; i < DAYS; i++) {
+        tempEnd[i] = temp.end;
+      }
+      props.setShiftStartTimes([...tempStart]);
+      props.setShiftEndTimes([...tempEnd]);
+    }
     setOpen(false);
   };
 
@@ -88,11 +102,7 @@ export default function FormTimeDialog(props) {
       <Button variant="outlined" color="primary" onClick={handleClickOpen}>
         {buttonName}
       </Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
+      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">{dialogTitle}</DialogTitle>
         <DialogContent>
           <DialogContentText>{dialogContent}</DialogContentText>
@@ -102,7 +112,7 @@ export default function FormTimeDialog(props) {
                 margin="normal"
                 id="start"
                 label="start"
-                value={temp["start"]}
+                value={temp.start}
                 onChange={handleStartTimeChange}
                 KeyboardButtonProps={{
                   "aria-label": "change time",
@@ -112,7 +122,7 @@ export default function FormTimeDialog(props) {
                 margin="normal"
                 id="end"
                 label="end"
-                value={temp["end"]}
+                value={temp.end}
                 onChange={handleEndTimeChange}
                 KeyboardButtonProps={{
                   "aria-label": "change time",

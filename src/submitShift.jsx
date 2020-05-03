@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import FormTimeDialog from "./FormTimeDialog";
 import Paper from "@material-ui/core/Paper";
@@ -11,6 +11,9 @@ import FormLabel from "@material-ui/core/FormLabel";
 import ShiftPickDateCalendar from "./ShiftPickDateCalendar";
 
 const useStyles = makeStyles(() => ({
+  root: {
+    textAlign: "center",
+  },
   title: {
     fontSize: 14,
   },
@@ -19,7 +22,7 @@ const useStyles = makeStyles(() => ({
     padding: "0.5em 1em",
     margin: "2em 0",
     fontWeight: "bold",
-    textAlign: "center",
+    // textAlign: "center",
   },
   h1: {
     fontFamily: "Courier",
@@ -27,7 +30,7 @@ const useStyles = makeStyles(() => ({
   chip: {
     margin: "10px 50px 10px 50px",
   },
-  root: {
+  grid: {
     flexGrow: 1,
   },
   paper: {
@@ -43,17 +46,13 @@ const useStyles = makeStyles(() => ({
     width: 800,
     display: "inline-block",
     marginTop: "10px",
+    textAlign: "center",
   },
 }));
 
 export default function submitShift() {
   const classes = useStyles();
-
-  const [value, setValue] = React.useState("0");
-
-  const handleChange = (event) => {
-    setValue(event.target.value);
-  };
+  const DAYS = 31;
 
   // シフト希望開始時間用State
   const [shiftStartTimes, setShiftStartTimes] = React.useState([
@@ -131,22 +130,68 @@ export default function submitShift() {
   });
 
   const baseTimeLabel = `${
-    baseTime.start.getHours() < 10 ? "0" + baseTime.start.getHours() : baseTime.start.getHours()
-  }:${baseTime.start.getMinutes() < 10 ? "0" + baseTime.start.getMinutes() : baseTime.start.getMinutes()}~${
-    baseTime.end.getHours() < 10 ? "0" + baseTime.end.getHours() : baseTime.end.getHours()
-  }:${baseTime.end.getMinutes() < 10 ? "0" + baseTime.end.getMinutes() : baseTime.end.getMinutes()}`;
+    baseTime.start.getHours() < 10
+      ? "0" + baseTime.start.getHours()
+      : baseTime.start.getHours()
+  }:${
+    baseTime.start.getMinutes() < 10
+      ? "0" + baseTime.start.getMinutes()
+      : baseTime.start.getMinutes()
+  }~${
+    baseTime.end.getHours() < 10
+      ? "0" + baseTime.end.getHours()
+      : baseTime.end.getHours()
+  }:${
+    baseTime.end.getMinutes() < 10
+      ? "0" + baseTime.end.getMinutes()
+      : baseTime.end.getMinutes()
+    }`;
+
+  // ラジオボタン用State
+  const [value, setValue] = React.useState("0");
+  // ラジオボタンハンドラ
+  const handleChange = (event) => {
+    setValue(event.target.value);
+
+    // ベース時間の変更
+    if (event.target.value === "0") {
+      const temp = [];
+      for (let i = 0; i < DAYS; i++) {
+        temp[i] = new Date("2020-04-01T10:00:54");
+      }
+      setShiftStartTimes([...temp]);
+      setShiftEndTimes([...temp]);
+    } else {
+      let tempStart = [];
+      let tempEnd = [];
+      for (let i = 0; i < DAYS; i++) {
+        tempStart[i] = baseTime.start;
+      }
+      for (let i = 0; i < DAYS; i++) {
+        tempEnd[i] = baseTime.end;
+      }
+      setShiftStartTimes([...tempStart]);
+      setShiftEndTimes([...tempEnd]);
+    }
+  };
 
   return (
-    <div>
+    <div className={classes.root}>
       <div className={classes.box}>
         <h1 className={classes.h1}>シフト提出</h1>
       </div>
 
-      <Grid container className={classes.root} spacing={2}>
+      <Grid container className={classes.grid} spacing={2}>
         <Grid item xs={12}>
           <Grid container justify="center" spacing={2}>
             <Grid key={0} item>
-              <FormTimeDialog time={baseTime} onSubmit={setBaseTime} />
+              <FormTimeDialog
+                time={baseTime}
+                onSubmit={setBaseTime}
+                radio={value}
+                setShiftStartTimes={setShiftStartTimes}
+                setShiftEndTimes={setShiftEndTimes}
+              />
               <Paper className={classes.paper}>
                 <div className={classes.chipGroup}>
                   <FormControl component="fieldset">
