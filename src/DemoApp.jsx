@@ -1,32 +1,37 @@
-import React from 'react';
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction'; // needed for dayClick
-import resourceTimelinePlugin from '@fullcalendar/resource-timeline';
-
-import './main.scss';
+import React from "react";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
+import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
+import "./main.scss";
 
 export default class DemoApp extends React.Component {
   calendarComponentRef = React.createRef();
+
+  //CLIENT_ID = "144071191541-hneaq23ajirf343jc6s8lus3teo4c8pt.apps.googleusercontent.com";
+  //API_KEY = "AIzaSyBtYPjPx7VhzTsKyxwxHo8t-4Br48_7EhQ";
+  //DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
+  //SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
+
   state = {
     calendarWeekends: true,
     calendarEvents: [
       // initial event data
-      { title: 'Event!!!!!!!!', start: new Date() },
+      { title: "Event!!!!!!!!", start: new Date() },
     ],
     personEvents: [],
     isSignedIn: null,
   };
 
   componentDidMount() {
-    window.gapi.load('client:auth2', () => {
+    window.gapi.load("client:auth2", () => {
       window.gapi.client
         .init({
-          apiKey: 'AIzaSyBtYPjPx7VhzTsKyxwxHo8t-4Br48_7EhQ',
-          clientId: '144071191541-hneaq23ajirf343jc6s8lus3teo4c8pt.apps.googleusercontent.com',
-          scope: 'https://www.googleapis.com/auth/calendar.readonly',
-          discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest'],
+          apiKey: "AIzaSyBtYPjPx7VhzTsKyxwxHo8t-4Br48_7EhQ",
+          clientId: "144071191541-hneaq23ajirf343jc6s8lus3teo4c8pt.apps.googleusercontent.com",
+          scope: "https://www.googleapis.com/auth/calendar.readonly",
+          discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
         })
         .then(() => {
           const auth = window.gapi.auth2.getAuthInstance();
@@ -41,6 +46,10 @@ export default class DemoApp extends React.Component {
     window.gapi.auth2.getAuthInstance().signIn();
   };
 
+  logoutFromGoogle = () => {
+    window.gapi.auth2.getAuthInstance().signOut();
+  };
+
   renderAuth() {
     if (this.state.isSignedIn === null) {
       return <div>i dont know your google account</div>;
@@ -51,10 +60,6 @@ export default class DemoApp extends React.Component {
       return <div>I can not see your google account!!</div>;
     }
   }
-
-  logoutFromGoogle = () => {
-    window.gapi.auth2.getAuthInstance().signOut();
-  };
 
   render() {
     return (
@@ -68,9 +73,9 @@ export default class DemoApp extends React.Component {
           <FullCalendar
             defaultView="resourceTimelineDay"
             header={{
-              left: 'prev,next today',
-              center: 'title',
-              right: 'resourceTimelineDay,dayGridMonth',
+              left: "prev,next today",
+              center: "title",
+              right: "resourceTimelineDay,dayGridMonth",
             }}
             schedulerLicenseKey="GPL-My-Project-Is-Open-Source"
             locale="ja"
@@ -83,18 +88,18 @@ export default class DemoApp extends React.Component {
             resourceLabelText="アルバイト"
             resources={[
               {
-                id: 'a',
-                title: '秋山',
+                id: "a",
+                title: "秋山",
               },
               {
-                id: 'b',
-                title: '山川',
-                eventColor: 'green',
+                id: "b",
+                title: "山川",
+                eventColor: "green",
               },
               {
-                id: 'c',
-                title: '渡部',
-                eventColor: 'orange',
+                id: "c",
+                title: "渡部",
+                eventColor: "orange",
               },
             ]}
             events={this.state.personEvents}
@@ -113,17 +118,17 @@ export default class DemoApp extends React.Component {
 
   gotoPast = () => {
     const calendarApi = this.calendarComponentRef.current.getApi();
-    calendarApi.gotoDate('2000-01-01'); // call a method on the Calendar object
+    calendarApi.gotoDate("2000-01-01"); // call a method on the Calendar object
   };
 
   handleDateClick = (arg) => {
-    const temp = 'Would you like to add an event to ' + arg.dateStr + ' ?';
+    const temp = "Would you like to add an event to " + arg.dateStr + " ?";
     if (confirm(temp)) {
       this.setState({
         // add new event data
         calendarEvents: this.state.calendarEvents.concat({
           // creates a new array
-          title: 'New Event',
+          title: "New Event",
           start: arg.date,
           allDay: arg.allDay,
         }),
@@ -134,12 +139,12 @@ export default class DemoApp extends React.Component {
   listUpcomingEvents = () => {
     window.gapi.client.calendar.events
       .list({
-        calendarId: 'primary',
+        calendarId: "primary",
         timeMin: new Date().toISOString(),
         showDeleted: false,
         singleEvents: true,
         maxResults: 10,
-        orderBy: 'startTime',
+        orderBy: "startTime",
       })
       .then((response) => {
         const events = response.result.items;
@@ -159,7 +164,7 @@ export default class DemoApp extends React.Component {
                 start: startTime,
               }),
               personEvents: this.state.personEvents.concat({
-                resourceId: 'a',
+                resourceId: "a",
                 title: event.summary,
                 start: startTime,
                 end: endTime,
@@ -167,7 +172,7 @@ export default class DemoApp extends React.Component {
             });
           }
         } else {
-          console.log('event nothing');
+          console.log("event nothing");
         }
       });
   };
