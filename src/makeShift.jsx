@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react"
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
@@ -53,6 +53,14 @@ const useStyles = makeStyles({
 
 export default function makeShift() {
   const classes = useStyles();
+  const [personNames, setPersonNames] = useState([
+    "秋山諒太",
+    "山田花子",
+    "立命太郎",
+    "山田孝之",
+    "山田二郎",
+    "山田三郎",
+  ]);
 
   return (
     <div>
@@ -62,7 +70,7 @@ export default function makeShift() {
       <div className={classes.card}>
         <Card className={classes.root}>
           <CardContent>
-            <MemberList />
+            <MemberList personNames={personNames} setPersonNames={setPersonNames} />
           </CardContent>
           <CardActions>
             <Button className={classes.saveButton} variant="contained" color="secondary">

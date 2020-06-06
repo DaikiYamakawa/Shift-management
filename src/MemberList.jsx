@@ -28,18 +28,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function generate(element) {
-  return [0, 1, 2].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    })
-  );
-}
-
-export default function MemberList() {
+export default function MemberList(props) {
   const classes = useStyles();
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
+  const person = props.personNames;
 
   return (
     <div className={classes.root}>
@@ -52,14 +45,16 @@ export default function MemberList() {
           </Typography>
           <div className={classes.demo}>
             <List dense={dense}>
-              {generate(
-                <ListItem>
-                  <ListItemIcon>
-                    <PersonIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="秋山 諒太" secondary={secondary ? "Secondary text" : null} />
-                </ListItem>
-              )}
+              {person.map((name) => {
+                return (
+                  <ListItem key={name}>
+                    <ListItemIcon>
+                      <PersonIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={name} secondary={secondary ? "Secondary text" : null} />
+                  </ListItem>
+                );
+              })}
             </List>
           </div>
         </Grid>
