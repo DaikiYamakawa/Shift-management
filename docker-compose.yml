@@ -10,5 +10,5 @@ services:
       - ./:/home/workdir/app
     working_dir: /home/workdir/app
     ports:
-      - 3000:3000
+      - 3002:3002
     tty: true
