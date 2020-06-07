@@ -63,6 +63,8 @@ const useStyles = makeStyles(() => ({
 export default function registerTime() {
   const classes = useStyles();
 
+  const [selectedDates, setSelectedDates] = useState([]);
+
   const [editDate, setEditDate] = useState(false);
   const editDateButton = editDate ? (
     <Button variant="outlined" onClick={() => setEditDate(!editDate)}>
@@ -86,11 +88,11 @@ export default function registerTime() {
   );
 
   // 時間用State
-  const [selectedDate, setSelectedDate] = React.useState(new Date("2014-08-18T21:11:54"));
+  const [selectedTime, setSelectedTime] = React.useState(new Date("2014-08-18T21:11:54"));
 
   const handleDateChange = (date) => {
     console.log(date);
-    setSelectedDate(date);
+    setSelectedTime(date);
   };
 
   return (
@@ -115,7 +117,7 @@ export default function registerTime() {
                   </Typography>
                   <div className={classes.calendarDiv}>
                     <Paper className={classes.papercalendar}>
-                      <PickDateCalendar />
+                      <PickDateCalendar selectedDates={selectedDates} setSelectedDates={setSelectedDates}/>
                     </Paper>
                   </div>
                 </div>
@@ -130,13 +132,14 @@ export default function registerTime() {
                   <Typography className={classes.pos} color="textSecondary">
                     一日の中で忙しい時間帯を登録して下さい。
                   </Typography>
+                  
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                     <Grid container justify="space-around">
                       <KeyboardTimePicker
                         margin="normal"
-                        id="time-picker"
+                        id="start"
                         label="Time picker"
-                        value={selectedDate}
+                        value={selectedTime}
                         onChange={handleDateChange}
                         KeyboardButtonProps={{
                           "aria-label": "change time",
@@ -144,9 +147,9 @@ export default function registerTime() {
                       />
                       <KeyboardTimePicker
                         margin="normal"
-                        id="time-picker"
+                        id="end"
                         label="Time picker"
-                        value={selectedDate}
+                        value={selectedTime}
                         onChange={handleDateChange}
                         KeyboardButtonProps={{
                           "aria-label": "change time",
@@ -154,54 +157,7 @@ export default function registerTime() {
                       />
                     </Grid>
                   </MuiPickersUtilsProvider>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Grid container justify="space-around">
-                      <KeyboardTimePicker
-                        margin="normal"
-                        id="time-picker"
-                        label="Time picker"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                          "aria-label": "change time",
-                        }}
-                      />
-                      <KeyboardTimePicker
-                        margin="normal"
-                        id="time-picker"
-                        label="Time picker"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                          "aria-label": "change time",
-                        }}
-                      />
-                    </Grid>
-                  </MuiPickersUtilsProvider>
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Grid container justify="space-around">
-                      <KeyboardTimePicker
-                        margin="normal"
-                        id="time-picker"
-                        label="Time picker"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                          "aria-label": "change time",
-                        }}
-                      />
-                      <KeyboardTimePicker
-                        margin="normal"
-                        id="time-picker"
-                        label="Time picker"
-                        value={selectedDate}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                          "aria-label": "change time",
-                        }}
-                      />
-                    </Grid>
-                  </MuiPickersUtilsProvider>
+                  
                 </div>
               </Paper>
             </Grid>
