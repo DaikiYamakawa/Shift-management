@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
@@ -88,12 +88,20 @@ export default function registerTime() {
   );
 
   // 時間用State
-  const [selectedTime, setSelectedTime] = React.useState(new Date("2014-08-18T21:11:54"));
-
-  const handleDateChange = (date) => {
-    console.log(date);
-    setSelectedTime(date);
-  };
+  const [selectedTime, setSelectedTime] = React.useState({
+    "1": {
+      start: new Date("2014-08-18T18:11:54"),
+      end: new Date("2014-08-18T19:11:54"),
+    },
+    "2": {
+      start: new Date("2014-08-18T20:11:54"),
+      end: new Date("2014-08-18T21:11:54"),
+    },
+    "3": {
+      start: new Date("2014-08-18T22:11:54"),
+      end: new Date("2014-08-18T23:11:54"),
+    },
+  });
 
   return (
     <div>
@@ -117,7 +125,7 @@ export default function registerTime() {
                   </Typography>
                   <div className={classes.calendarDiv}>
                     <Paper className={classes.papercalendar}>
-                      <PickDateCalendar selectedDates={selectedDates} setSelectedDates={setSelectedDates}/>
+                      <PickDateCalendar selectedDates={selectedDates} setSelectedDates={setSelectedDates} />
                     </Paper>
                   </div>
                 </div>
@@ -132,32 +140,44 @@ export default function registerTime() {
                   <Typography className={classes.pos} color="textSecondary">
                     一日の中で忙しい時間帯を登録して下さい。
                   </Typography>
-                  
-                  <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                    <Grid container justify="space-around">
-                      <KeyboardTimePicker
-                        margin="normal"
-                        id="start"
-                        label="Time picker"
-                        value={selectedTime}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                          "aria-label": "change time",
-                        }}
-                      />
-                      <KeyboardTimePicker
-                        margin="normal"
-                        id="end"
-                        label="Time picker"
-                        value={selectedTime}
-                        onChange={handleDateChange}
-                        KeyboardButtonProps={{
-                          "aria-label": "change time",
-                        }}
-                      />
-                    </Grid>
-                  </MuiPickersUtilsProvider>
-                  
+                  {Object.keys(selectedTime).map((key) => {
+                    let obj = selectedTime;
+
+                    const handleStartTimeChange = (date) => {
+                      setSelectedTime({ ...obj, [key]: { ...obj[key], start: date } });
+                    };
+
+                    const handleEndTimeChange = (date) => {
+                      setSelectedTime({ ...obj, [key]: { ...obj[key], end: date } });
+                    };
+
+                    return (
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <Grid container justify="space-around">
+                          <KeyboardTimePicker
+                            margin="normal"
+                            id="start"
+                            label="Start Time"
+                            value={selectedTime[key].start}
+                            onChange={handleStartTimeChange}
+                            KeyboardButtonProps={{
+                              "aria-label": "change time",
+                            }}
+                          />
+                          <KeyboardTimePicker
+                            margin="normal"
+                            id="end"
+                            label="End Time"
+                            value={selectedTime[key].end}
+                            onChange={handleEndTimeChange}
+                            KeyboardButtonProps={{
+                              "aria-label": "change time",
+                            }}
+                          />
+                        </Grid>
+                      </MuiPickersUtilsProvider>
+                    );
+                  })}
                 </div>
               </Paper>
             </Grid>
