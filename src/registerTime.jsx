@@ -103,6 +103,10 @@ export default function registerTime() {
     },
   });
 
+  const handleTimeChange = (key, name, date) => {
+    setSelectedTime({ ...selectedTime, [key]: { ...selectedTime[key], [name]: date } });
+  };
+
   return (
     <div>
       <div className={classes.box}>
@@ -140,44 +144,32 @@ export default function registerTime() {
                   <Typography className={classes.pos} color="textSecondary">
                     一日の中で忙しい時間帯を登録して下さい。
                   </Typography>
-                  {Object.keys(selectedTime).map((key) => {
-                    let obj = selectedTime;
-
-                    const handleStartTimeChange = (date) => {
-                      setSelectedTime({ ...obj, [key]: { ...obj[key], start: date } });
-                    };
-
-                    const handleEndTimeChange = (date) => {
-                      setSelectedTime({ ...obj, [key]: { ...obj[key], end: date } });
-                    };
-
-                    return (
-                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                        <Grid container justify="space-around">
-                          <KeyboardTimePicker
-                            margin="normal"
-                            id="start"
-                            label="Start Time"
-                            value={selectedTime[key].start}
-                            onChange={handleStartTimeChange}
-                            KeyboardButtonProps={{
-                              "aria-label": "change time",
-                            }}
-                          />
-                          <KeyboardTimePicker
-                            margin="normal"
-                            id="end"
-                            label="End Time"
-                            value={selectedTime[key].end}
-                            onChange={handleEndTimeChange}
-                            KeyboardButtonProps={{
-                              "aria-label": "change time",
-                            }}
-                          />
-                        </Grid>
-                      </MuiPickersUtilsProvider>
-                    );
-                  })}
+                  {Object.entries(selectedTime).map(([key, { start, end }]) => (
+                    <MuiPickersUtilsProvider utils={DateFnsUtils} key={`picker-${key}`}>
+                      <Grid container justify="space-around">
+                        <KeyboardTimePicker
+                          margin="normal"
+                          id="start"
+                          label="Start Time"
+                          value={start}
+                          onChange={(date) => handleTimeChange(key, "start", date)}
+                          KeyboardButtonProps={{
+                            "aria-label": "change time",
+                          }}
+                        />
+                        <KeyboardTimePicker
+                          margin="normal"
+                          id="end"
+                          label="End Time"
+                          value={end}
+                          onChange={(date) => handleTimeChange(key, "end", date)}
+                          KeyboardButtonProps={{
+                            "aria-label": "change time",
+                          }}
+                        />
+                      </Grid>
+                    </MuiPickersUtilsProvider>
+                  ))}
                 </div>
               </Paper>
             </Grid>
