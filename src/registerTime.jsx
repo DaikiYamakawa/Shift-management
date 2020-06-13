@@ -129,7 +129,7 @@ export default function registerTime() {
                   </Typography>
                   <div className={classes.calendarDiv}>
                     <Paper className={classes.papercalendar}>
-                      <PickDateCalendar selectedDates={selectedDates} setSelectedDates={setSelectedDates} />
+                      <PickDateCalendar selectedDates={selectedDates} setSelectedDates={setSelectedDates} editDate={editDate}/>
                     </Paper>
                   </div>
                 </div>
