@@ -47,6 +47,7 @@ export default function ShiftPickDateCalendar(props) {
     const temp = [...props.shiftStartTimes];
     temp[pickedDate - 1] = date;
     setTempStart([...temp]);
+    console.log(date);
     if (tempEnd[pickedDate - 1].getHours() - date.getHours() < 0) {
       setValidated(false);
     } else {

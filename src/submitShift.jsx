@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import FormTimeDialog from "./FormTimeDialog";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Radio from "@material-ui/core/Radio";
@@ -8,7 +7,9 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
+import Button from "@material-ui/core/Button";
 import ShiftPickDateCalendar from "./ShiftPickDateCalendar";
+import FormTimeDialog from "./FormTimeDialog";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -47,6 +48,13 @@ const useStyles = makeStyles(() => ({
     display: "inline-block",
     marginTop: "10px",
     textAlign: "center",
+  },
+  submitButton: {
+    
+    
+  },
+  calendarArea: {
+    marginTop: "50px",
   },
 }));
 
@@ -130,22 +138,10 @@ export default function submitShift() {
   });
 
   const baseTimeLabel = `${
-    baseTime.start.getHours() < 10
-      ? "0" + baseTime.start.getHours()
-      : baseTime.start.getHours()
-  }:${
-    baseTime.start.getMinutes() < 10
-      ? "0" + baseTime.start.getMinutes()
-      : baseTime.start.getMinutes()
-  }~${
-    baseTime.end.getHours() < 10
-      ? "0" + baseTime.end.getHours()
-      : baseTime.end.getHours()
-  }:${
-    baseTime.end.getMinutes() < 10
-      ? "0" + baseTime.end.getMinutes()
-      : baseTime.end.getMinutes()
-    }`;
+    baseTime.start.getHours() < 10 ? `0${baseTime.start.getHours()}` : baseTime.start.getHours()
+  }:${baseTime.start.getMinutes() < 10 ? `0${baseTime.start.getMinutes()}` : baseTime.start.getMinutes()}~${
+    baseTime.end.getHours() < 10 ? `0${baseTime.end.getHours()}` : baseTime.end.getHours()
+  }:${baseTime.end.getMinutes() < 10 ? `0${baseTime.end.getMinutes()}` : baseTime.end.getMinutes()}`;
 
   // ラジオボタン用State
   const [value, setValue] = React.useState("0");
@@ -162,8 +158,8 @@ export default function submitShift() {
       setShiftStartTimes([...temp]);
       setShiftEndTimes([...temp]);
     } else {
-      let tempStart = [];
-      let tempEnd = [];
+      const tempStart = [];
+      const tempEnd = [];
       for (let i = 0; i < DAYS; i++) {
         tempStart[i] = baseTime.start;
       }
@@ -208,15 +204,23 @@ export default function submitShift() {
         </Grid>
       </Grid>
 
-      <div>
-        <Paper className={classes.papercalendar}>
-          <ShiftPickDateCalendar
-            shiftStartTimes={shiftStartTimes}
-            setShiftStartTimes={setShiftStartTimes}
-            shiftEndTimes={shiftEndTimes}
-            setShiftEndTimes={setShiftEndTimes}
-          />
-        </Paper>
+      <div className={classes.calendarArea}>
+        <div>
+          <Button className={classes.submitButton} variant="contained" color="primary">
+            シフト提出
+          </Button>
+        </div>
+
+        <div>
+          <Paper className={classes.papercalendar}>
+            <ShiftPickDateCalendar
+              shiftStartTimes={shiftStartTimes}
+              setShiftStartTimes={setShiftStartTimes}
+              shiftEndTimes={shiftEndTimes}
+              setShiftEndTimes={setShiftEndTimes}
+            />
+          </Paper>
+        </div>
       </div>
     </div>
   );
