@@ -1,66 +1,76 @@
-import React, { useState } from "react"
-import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import MemberList from "./MemberList";
+import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Container from '@material-ui/core/Container';
+import styled from 'styled-components';
+import MemberList from './MemberList';
+import axios from 'axios';
 
 const useStyles = makeStyles({
   container: {
-    maxWidth: "70%",
-    maxHeight: "70%",
+    maxWidth: '70%',
+    maxHeight: '70%',
   },
   bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
   },
   title: {
     fontSize: 14,
   },
   box: {
-    display: "inline",
-    padding: "0.5em 1em",
-    margin: "2em 0",
-    fontWeight: "bold",
-    textAlign: "center",
+    display: 'inline',
+    padding: '0.5em 1em',
+    margin: '2em 0',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   h1: {
-    fontFamily: "Courier",
+    fontFamily: 'Courier',
   },
   root: {
-    minWidth: "70%",
-    display: "inline-block",
+    minWidth: '70%',
+    display: 'inline-block',
   },
   card: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   saveButton: {
-    display: "block",
-    margin: "0 0 0 auto",
+    display: 'block',
+    margin: '0 0 0 auto',
   },
   createButton: {
-    display: "block",
-    margin: "0 auto",
+    display: 'block',
+    margin: '0 auto',
   },
   createDiv: {
-    display: "block",
-    textAlign: "center",
+    display: 'block',
+    textAlign: 'center',
   },
 });
 
 export default function makeShift() {
   const classes = useStyles();
-  const [personNames, setPersonNames] = useState([
-    "秋山諒太",
-    "山田花子",
-    "立命太郎",
-    "山田孝之",
-    "山田二郎",
-    "山田三郎",
-  ]);
+  let persons = [];
+  const [person, setPerson] = React.useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const result = await axios.get('http://localhost:3000/non-submit-lists');
+      for (let i = 0; i < result.data.length; i++) {
+        persons.push(result.data[i].name);
+      }
+      setPerson(persons);
+    }
+    fetchData();
+  }, [setPerson]);
 
   return (
     <div>
@@ -70,7 +80,7 @@ export default function makeShift() {
       <div className={classes.card}>
         <Card className={classes.root}>
           <CardContent>
-            <MemberList personNames={personNames} setPersonNames={setPersonNames} />
+            <MemberList person={person} />
           </CardContent>
           <CardActions>
             <Button className={classes.saveButton} variant="contained" color="secondary">
