@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -7,6 +7,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
+import axios from 'axios';
 
 const useStyles = makeStyles(() => ({
   validation: {
@@ -59,14 +60,44 @@ export default function FormDialog(props) {
   };
 
   const handleSubmit = () => {
-    console.log(inputRef.current.value);
-    if (props.id === 2) {
-      props.onSubmit(inputRef.current.value);
-    } else {
-      console.log("OK");
-      temp.push(inputRef.current.value);
-      props.onSubmit(temp);
+    // console.log(inputRef.current.value);
+    // if (props.id === 2) {
+    //   props.onSubmit(inputRef.current.value);
+    // } else {
+    //   console.log("OK");
+    //   temp.push(inputRef.current.value);
+    //   props.onSubmit(temp);
+    // }
+
+    async function postData() {
+      let res;
+      console.log("ee");
+
+      if (props.id === "0") {
+        try {
+          res = await axios.post('http://localhost:3000/part-time-job-lists', {
+            name: inputRef.current.value,
+            skill: [],
+          });
+          temp.push(inputRef.current.value);
+          props.onSubmit(temp);
+        } catch (err) {
+          res = err.response;
+        }
+      } else if (props.id === "1") {
+        try {
+          res = await axios.post('http://localhost:3000/skill-lists', {
+            name: inputRef.current.value,
+          });
+          temp.push(inputRef.current.value);
+          props.onSubmit(temp);
+        } catch (err) {
+          res = err.response;
+        }
+      }
     }
+
+    postData();
     setValidated(false);
     setOpen(false);
   };

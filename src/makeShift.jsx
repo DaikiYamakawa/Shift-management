@@ -63,7 +63,12 @@ export default function makeShift() {
 
   useEffect(() => {
     async function fetchData() {
-      const result = await axios.get('http://localhost:3000/non-submit-lists');
+      let result;
+      try {
+        result = await axios.get('http://localhost:3000/non-submit-lists');
+      } catch (err) {
+        result = err.response;
+      }
       for (let i = 0; i < result.data.length; i++) {
         persons.push(result.data[i].name);
       }
