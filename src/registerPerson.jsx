@@ -60,6 +60,7 @@ export default function registerPerson() {
   const [edit, setEdit] = useState(false);
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
+  const allSkills = [];
 
   useEffect(() => {
     async function fetchData() {
@@ -68,6 +69,17 @@ export default function registerPerson() {
       let result;
 
       try {
+        // スキル情報の取得
+        result = await axios.get("http://localhost:3000/skill-lists");
+      } catch (err) {
+        result = err.response;
+      }
+      for (let i = 0; i < result.data.length; i++) {
+        allSkills.push(result.data[i].name);
+      }
+
+      try {
+        // アルバイト情報の取得
         result = await axios.get("http://localhost:3000/part-time-job-lists");
       } catch (err) {
         result = err.response;
@@ -114,7 +126,7 @@ export default function registerPerson() {
     );
 
     const editSkill = edit ? (
-      <CheckBox />
+      <CheckBox allSkills={allSkills} skill={skills[selectedPersonNum]}/>
     ) : (
       <Grid item xs={12} md={6}>
         <div>

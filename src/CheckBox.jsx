@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CheckBox() {
+export default function CheckBox(props) {
   const classes = useStyles();
   const [state, setState] = React.useState({
     gilad: true,
