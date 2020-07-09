@@ -17,34 +17,31 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CheckBox(props) {
   const classes = useStyles();
-  const [state, setState] = React.useState({
-    gilad: true,
-    jason: false,
-    antoine: false,
-  });
+  const [state, setState] = React.useState(props.skill);
+  // const [state, setState] = React.useState({
+  //   gilad: true,
+  //   jason: false,
+  //   antoine: false,
+  // });
 
-  const handleChange = (name) => (event) => {
-    setState({ ...state, [name]: event.target.checked });
+  const handleChange = (event) => {
+    setState({ ...state, [event.target.name]: event.target.checked });
   };
 
-  const { gilad, jason, antoine } = state;
+  //const { gilad, jason, antoine } = state;
 
   return (
     <div className={classes.root}>
       <FormControl component="fieldset" className={classes.formControl}>
         <FormGroup>
-          <FormControlLabel
-            control={<Checkbox checked={gilad} onChange={handleChange('gilad')} value="gilad" />}
-            label="キャッシャー"
-          />
-          <FormControlLabel
-            control={<Checkbox checked={jason} onChange={handleChange('jason')} value="jason" />}
-            label="ベーカリー"
-          />
-          <FormControlLabel
-            control={<Checkbox checked={antoine} onChange={handleChange('antoine')} value="antoine" />}
-            label="ウォッシャー"
-          />
+          {Object.entries(state).map((item, index) => {
+            return (
+              <FormControlLabel
+                control={<Checkbox checked={item[1]} onChange={handleChange} name={item[0]} key={index} />}
+                label={item[0]}
+              />
+            );
+          })}
         </FormGroup>
         <FormHelperText>編集中</FormHelperText>
       </FormControl>

@@ -130,12 +130,14 @@ export default function registerPerson() {
     ) : (
       <Grid item xs={12} md={6}>
         <div>
-          <List>
-            {skills[selectedPersonNum].map((name, index) => (
-              <ListItem key={index}>
-                <ListItemText primary={name} />
-              </ListItem>
-            ))}
+            <List>
+              {Object.entries(skills[selectedPersonNum]).filter(x => x[1]).map((item) => { 
+                  return (
+                    <ListItem key={item[0]}>
+                      <ListItemText primary={item[0]} />
+                    </ListItem>
+                  );
+              })}
           </List>
         </div>
       </Grid>
