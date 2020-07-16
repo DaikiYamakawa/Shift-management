@@ -10,9 +10,10 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import axios from "axios";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import FormDialog from "./FormDialog";
 import CheckBox from "./CheckBox";
-import CircularProgress from '@material-ui/core/CircularProgress';
+import EditDialog from "./EditDialog";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -46,8 +47,8 @@ const useStyles = makeStyles((theme) => ({
     overflow: "scroll",
   },
   progress: {
-    display: 'flex',
-    '& > * + *': {
+    display: "flex",
+    "& > * + *": {
       marginLeft: theme.spacing(2),
     },
   },
@@ -60,6 +61,7 @@ export default function registerPerson() {
   const [edit, setEdit] = useState(false);
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [num, setNum] = useState(1);
   const allSkills = [];
 
   useEffect(() => {
@@ -105,6 +107,7 @@ export default function registerPerson() {
 
   const handleClick = (index) => () => {
     setSelectedPersonNum(index);
+    setNum(index + 1);
   };
 
   if (loading) {
@@ -114,72 +117,85 @@ export default function registerPerson() {
         <CircularProgress color="secondary" />
       </div>
     );
-  } else {
-    const editButton = edit ? (
-      <Button variant="outlined" onClick={() => setEdit(!edit)}>
-        編集終了
-      </Button>
-    ) : (
-      <Button variant="outlined" onClick={() => setEdit(!edit)}>
-        編集
-      </Button>
-    );
+  }
+  // const editButton = edit ? (
+  //   <Button variant="outlined" onClick={() => setEdit(!edit)}>
+  //     編集終了
+  //   </Button>
+  // ) : (
+  //   <Button variant="outlined" onClick={() => setEdit(!edit)}>
+  //     編集
+  //   </Button>
+  // );
 
-    const editSkill = edit ? (
-      <CheckBox allSkills={allSkills} skill={skills[selectedPersonNum]}/>
-    ) : (
-      <Grid item xs={12} md={6}>
-        <div>
-            <List>
-              {Object.entries(skills[selectedPersonNum]).filter(x => x[1]).map((item) => { 
-                  return (
-                    <ListItem key={item[0]}>
-                      <ListItemText primary={item[0]} />
-                    </ListItem>
-                  );
-              })}
-          </List>
-        </div>
-      </Grid>
-    );
+  // const editSkill = edit ? (
+  //   <CheckBox skill={skills[selectedPersonNum]}/>
+  // ) : (
+  //   <Grid item xs={12} md={6}>
+  //     <div>
+  //         <List>
+  //           {Object.entries(skills[selectedPersonNum]).filter(x => x[1]).map((item) => {
+  //               return (
+  //                 <ListItem key={item[0]}>
+  //                   <ListItemText primary={item[0]} />
+  //                 </ListItem>
+  //               );
+  //           })}
+  //       </List>
+  //     </div>
+  //   </Grid>
+  // );
 
-    return (
-      <div className={classes.parent}>
-        <div className={classes.box}>
-          <h1 className={classes.h1}>アルバイト登録</h1>
-        </div>
-  
-        <Grid container className={classes.root_} spacing={2}>
-          <Grid item xs={12}>
-            <Grid container justify="center" spacing={2}>
-              <Grid key={0} item>
-                <FormDialog id="0" name={personNames} onSubmit={setPersonNames} />
-                <Paper className={classes.paper_}>
-                  <div className={classes.chipGroup}>
-                    {personNames.map((name, index) => (
-                      <Chip
-                        icon={<PersonIcon />}
-                        key={index}
-                        label={name}
-                        onClick={handleClick(index)}
-                        onDelete={handleDelete(index)}
-                        className={classes.chip}
-                      />
-                    ))}
+  return (
+    <div className={classes.parent}>
+      <div className={classes.box}>
+        <h1 className={classes.h1}>アルバイト登録</h1>
+      </div>
+
+      <Grid container className={classes.root_} spacing={2}>
+        <Grid item xs={12}>
+          <Grid container justify="center" spacing={2}>
+            <Grid key={0} item>
+              <FormDialog id="0" name={personNames} onSubmit={setPersonNames} />
+              <Paper className={classes.paper_}>
+                <div className={classes.chipGroup}>
+                  {personNames.map((name, index) => (
+                    <Chip
+                      icon={<PersonIcon />}
+                      key={index}
+                      label={name}
+                      onClick={handleClick(index)}
+                      onDelete={handleDelete(index)}
+                      className={classes.chip}
+                    />
+                  ))}
+                </div>
+              </Paper>
+            </Grid>
+            <Grid key={1} item>
+              <EditDialog name={personNames[selectedPersonNum]} skill={skills[selectedPersonNum]} num={num}/>
+              <Paper className={classes.paper_}>
+                <Typography noWrap>{personNames[selectedPersonNum]}さんのスキル</Typography>
+                <Grid item xs={12} md={6}>
+                  <div>
+                    <List>
+                      {Object.entries(skills[selectedPersonNum])
+                        .filter((x) => x[1])
+                        .map((item) => {
+                          return (
+                            <ListItem key={item[0]}>
+                              <ListItemText primary={item[0]} />
+                            </ListItem>
+                          );
+                        })}
+                    </List>
                   </div>
-                </Paper>
-              </Grid>
-              <Grid key={1} item>
-                {editButton}
-                <Paper className={classes.paper_}>
-                  <Typography noWrap>{personNames[selectedPersonNum]}さんのスキル</Typography>
-                  {editSkill}
-                </Paper>
-              </Grid>
+                </Grid>
+              </Paper>
             </Grid>
           </Grid>
         </Grid>
-      </div>
-    );
-  }
+      </Grid>
+    </div>
+  );
 }
