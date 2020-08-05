@@ -32,7 +32,7 @@ export default function MemberList(props) {
   const classes = useStyles();
   const [dense, setDense] = React.useState(false);
   const [secondary, setSecondary] = React.useState(false);
-  const person = props.personNames;
+  const person = props.person;
 
   return (
     <div className={classes.root}>

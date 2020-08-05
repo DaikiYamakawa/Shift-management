@@ -7,21 +7,32 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import { useSelector } from "react-redux";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import { useDispatch } from "react-redux";
+import { selectTab } from "../stores/skills";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
-    <Typography
-      component="div"
+    <div
       role="tabpanel"
       hidden={value !== index}
       id={`full-width-tabpanel-${index}`}
       aria-labelledby={`full-width-tab-${index}`}
       {...other}
     >
-      {value === index && <Box p={3}>{children}</Box>}
-    </Typography>
+      {value === index && (
+        <Box p={3}>
+          <Typography component={"span"} variant={"body2"}>
+            {children}
+          </Typography>
+        </Box>
+      )}
+    </div>
   );
 }
 
@@ -41,19 +52,25 @@ function a11yProps(index) {
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
+    width: 300,
   },
 }));
 
-export default function FullWidthTabs(props) {
+export default function FullWidthTabs() {
   const classes = useStyles();
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
+  const dispatch = useDispatch();
+
+  const busySkills = useSelector((state) => state.skills.busySkills);
+  const freeSkills = useSelector((state) => state.skills.freeSkills);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    dispatch(selectTab(newValue));
   };
 
-  const handleChangeIndex = (index) => {
+  const handleChangeIndex = (newValue) => {
     setValue(index);
   };
 
@@ -68,8 +85,8 @@ export default function FullWidthTabs(props) {
           variant="fullWidth"
           aria-label="full width tabs example"
         >
-          <Tab label="busy" {...a11yProps(0)} />
-          <Tab label="free" {...a11yProps(1)} />
+          <Tab label="BUSY" {...a11yProps(0)} />
+          <Tab label="FREE" {...a11yProps(1)} />
         </Tabs>
       </AppBar>
       <SwipeableViews
@@ -78,10 +95,34 @@ export default function FullWidthTabs(props) {
         onChangeIndex={handleChangeIndex}
       >
         <TabPanel value={value} index={0} dir={theme.direction}>
-          {props.value}
+          <div>
+            <List>
+              {Object.entries(busySkills)
+                .filter((x) => x[1])
+                .map((item) => {
+                  return (
+                    <ListItem key={item[0]}>
+                      <ListItemText primary={item[0]} />
+                    </ListItem>
+                  );
+                })}
+            </List>
+          </div>
         </TabPanel>
         <TabPanel value={value} index={1} dir={theme.direction}>
-          {props.value}
+          <div>
+            <List>
+              {Object.entries(freeSkills)
+                .filter((x) => x[1])
+                .map((item) => {
+                  return (
+                    <ListItem key={item[0]}>
+                      <ListItemText primary={item[0]} />
+                    </ListItem>
+                  );
+                })}
+            </List>
+          </div>
         </TabPanel>
       </SwipeableViews>
     </div>

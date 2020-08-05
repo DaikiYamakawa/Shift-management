@@ -1,6 +1,6 @@
 module.exports = {
   mode: 'development',
-  entry: './src/main.jsx',
+  entry: ['@babel/polyfill', './src/main.jsx'],
   resolve: {
     extensions: [ '.js', '.jsx' ]
   },
