@@ -15,21 +15,12 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 import ShiftPickDateCalendar from './ShiftPickDateCalendar';
+import TitleButton from "./TitleButton";
 
 
 const useStyles = makeStyles(theme => ({
   title: {
     fontSize: 14,
-  },
-  box: {
-    display: 'inline',
-    padding: '0.5em 1em',
-    margin: '2em 0',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  h1: {
-    fontFamily: 'Courier',
   },
   chip: {
     margin: '10px 50px 10px 50px',
@@ -156,9 +147,7 @@ export default function submitShift() {
 
   return (
     <div>
-      <div className={classes.box}>
-        <h1 className={classes.h1}>シフト提出</h1>
-      </div>
+      <TitleButton name="シフト提出" button="提出"/>
 
       <Grid container className={classes.root_} spacing={2}>
         <Grid item xs={12}>

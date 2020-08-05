@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
 import resourceTimelinePlugin from "@fullcalendar/resource-timeline";
 import "./main.scss";
+import { fetchMembers } from "../stores/members";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchSkills, deleteSkill, fetchSkillSets } from "../stores/skills";
 
 // export default class DemoApp extends React.Component {
 //   calendarComponentRef = React.createRef();
@@ -24,23 +27,23 @@ import "./main.scss";
 //     isSignedIn: null,
 //   };
 
-  // componentDidMount() {
-  //   window.gapi.load("client:auth2", () => {
-  //     window.gapi.client
-  //       .init({
-  //         apiKey: "AIzaSyBtYPjPx7VhzTsKyxwxHo8t-4Br48_7EhQ",
-  //         clientId: "144071191541-hneaq23ajirf343jc6s8lus3teo4c8pt.apps.googleusercontent.com",
-  //         scope: "https://www.googleapis.com/auth/calendar.readonly",
-  //         discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
-  //       })
-  //       .then(() => {
-  //         const auth = window.gapi.auth2.getAuthInstance();
+// componentDidMount() {
+//   window.gapi.load("client:auth2", () => {
+//     window.gapi.client
+//       .init({
+//         apiKey: "AIzaSyBtYPjPx7VhzTsKyxwxHo8t-4Br48_7EhQ",
+//         clientId: "144071191541-hneaq23ajirf343jc6s8lus3teo4c8pt.apps.googleusercontent.com",
+//         scope: "https://www.googleapis.com/auth/calendar.readonly",
+//         discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
+//       })
+//       .then(() => {
+//         const auth = window.gapi.auth2.getAuthInstance();
 
-  //         this.setState({ isSignedIn: auth.isSignedIn.get() });
-  //         this.listUpcomingEvents();
-  //       });
-  //   });
-  // }
+//         this.setState({ isSignedIn: auth.isSignedIn.get() });
+//         this.listUpcomingEvents();
+//       });
+//   });
+// }
 
 //   loginWithGoogle = () => {
 //     window.gapi.auth2.getAuthInstance().signIn();
@@ -189,6 +192,8 @@ export default function DemoApp() {
   const [personEvents, setPersonEvents] = React.useState();
   const [isSignedIn, setIsSignedIn] = React.useState(null);
 
+  const dispatch = useDispatch();
+
   // state = {
   //   calendarWeekends: true,
   //   calendarEvents: [
@@ -260,6 +265,16 @@ export default function DemoApp() {
   };
 
   useEffect(() => {
+    async function fetchData() {
+      try {
+        dispatch(fetchMembers());
+        dispatch(fetchSkills());
+        dispatch(fetchSkillSets());
+      } catch (err) {
+        console.log(err.response);
+      }
+    }
+
     function checkAuth() {
       window.gapi.load("client:auth2", () => {
         window.gapi.client
@@ -277,6 +292,7 @@ export default function DemoApp() {
       });
     }
     checkAuth();
+    fetchData();
   }, [setIsSignedIn]);
 
   return (

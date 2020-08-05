@@ -7,22 +7,24 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import { useSelector } from "react-redux";
 import CheckBox from "./CheckBox";
 
-const useStyles = makeStyles(() => ({
-  validation: {
-    color: "red",
-    display: "block",
-  },
-}));
+// const useStyles = makeStyles(() => ({
+//   validation: {
+//     color: "red",
+//     display: "block",
+//   },
+// }));
 
 export default function EditDialog(props) {
-  const classes = useStyles();
+  // const classes = useStyles();
 
   const [open, setOpen] = React.useState(false);
-  const [skill, setSkill] = React.useState(props.skill);
 
-  const Name = props.name;
+  const selected = useSelector((state) => state.members.selected);
+  const name = useSelector((state) => state.members.members[selected].name);
+  const skill = useSelector((state) => state.members.members[selected].skill);
 
   const buttonName = "編集";
 
@@ -44,7 +46,7 @@ export default function EditDialog(props) {
     async function patchData() {
       let result;
       try {
-        result = await axios.patch(`http://localhost:3000/part-time-job-lists/${props.num}`, {
+        result = await axios.patch(`http://localhost:3000/part-time-job-lists/${selected}`, {
           skill,
         });
         console.log(result);
@@ -95,28 +97,37 @@ export default function EditDialog(props) {
   //   setOpen(false);
   // };
 
-  return (
-    <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        {buttonName}
-      </Button>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">
-          {Name}さん{dialogTitle}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>{dialogContent}</DialogContentText>
-          <CheckBox skill={props.skill} setSkill={setSkill} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} color="primary">
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
+  if (props.num == 1) {
+    return (
+      <div>
+        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+          {buttonName}
+        </Button>
+        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">
+            {name}さん{dialogTitle}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText>{dialogContent}</DialogContentText>
+            <CheckBox id="1" />
+          </DialogContent>
+        </Dialog>
+      </div>
+    );
+  } else if (props.num == 2) {
+    return (
+      <div>
+        <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+          {buttonName}
+        </Button>
+        <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+          <DialogTitle id="form-dialog-title">スキルセット編集中</DialogTitle>
+          <DialogContent>
+            <DialogContentText>{dialogContent}</DialogContentText>
+            <CheckBox id="2" />
+          </DialogContent>
+        </Dialog>
+      </div>
+    );
+  }
 }
