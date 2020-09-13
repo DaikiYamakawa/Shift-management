@@ -49,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
   chipGroup: {
     overflow: "scroll",
   },
+  btn: {
+    marginBottom: 10,
+  },
 }));
 
 export default function registerSkill() {
@@ -74,33 +77,18 @@ export default function registerSkill() {
   const handleDelete = (index, name) => () => {
     console.info("You clicked the delete icon.");
     console.log(index);
-    // const temp = [...personNames];
-    // temp.splice(index, 1);
-    // setPersonNames(temp);
     const obj = {
       index: index,
       name: name,
-    }
+    };
     dispatch(deleteSkill(obj));
     dispatch(deletePersonSkill(name));
   };
 
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
-  const [personNames, setPersonNames] = useState(["キャッシャー", "ベーカリー", "ウォッシャー"]);
-
-  const [edit, setEdit] = useState(false);
-  const editSkill = edit ? (
-    <CheckBox />
-  ) : (
+  const editSkill = (
     <Grid item xs={12} md={6}>
       <div>
         <List>
-          {/* {["キャッシャー", "ベーカリー", "ウォッシャー"].map((name, index) => ( */}
           {skills.map((name) => (
             <ListItem key={name}>
               <ListItemText primary={name} />
@@ -110,16 +98,6 @@ export default function registerSkill() {
       </div>
     </Grid>
   );
-
-  // const editButton = edit ? (
-  //   <Button variant="outlined" onClick={() => setEdit(!edit)}>
-  //     編集終了
-  //   </Button>
-  // ) : (
-  //   <Button variant="outlined" onClick={() => setEdit(!edit)}>
-  //     編集
-  //   </Button>
-  // );
 
   if (loading) {
     return (
@@ -141,31 +119,39 @@ export default function registerSkill() {
     <div className={classes.parent}>
       <TitleButton name="スキル登録" button="登録" />
 
-      <Grid container className={classes.root_} spacing={2}>
-        <Grid item xs={12}>
-          <Grid container justify="center" spacing={2}>
-            <Grid key={0} item>
-              <FormDialog id="1" name={personNames} onSubmit={setPersonNames} />
-              <Paper className={classes.paper_}>
-                <div className={classes.chipGroup}>
-                  {skills.map((name, index) => (
-                    <Chip
-                      icon={<WorkIcon />}
-                      key={name}
-                      label={name}
-                      onDelete={handleDelete(index, name)}
-                      className={classes.chip}
-                    />
-                  ))}
-                </div>
-              </Paper>
-            </Grid>
-            <Grid key={1} item>
+      <Grid container alignItems="center" justify="center" spacing={2}>
+        <Grid key={0} item>
+          <Grid item>
+            <div className={classes.btn}>
+              <FormDialog id="1" />
+            </div>
+          </Grid>
+          <Grid item>
+            <Paper className={classes.paper_}>
+              <div className={classes.chipGroup}>
+                {skills.map((item, index) => (
+                  <Chip
+                    icon={<WorkIcon />}
+                    key={item.value}
+                    label={item.value}
+                    onDelete={handleDelete(index, item.value)}
+                    className={classes.chip}
+                  />
+                ))}
+              </div>
+            </Paper>
+          </Grid>
+        </Grid>
+        <Grid key={1} item>
+          <Grid item>
+            <div className={classes.btn}>
               <EditDialog num="2" />
-              <Paper className={classes.paper_}>
-                <TabPanel value={editSkill} />
-              </Paper>
-            </Grid>
+            </div>
+          </Grid>
+          <Grid item>
+            <Paper className={classes.paper_}>
+              <TabPanel value={editSkill} />
+            </Paper>
           </Grid>
         </Grid>
       </Grid>

@@ -8,201 +8,33 @@ import "./main.scss";
 import { fetchMembers } from "../stores/members";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSkills, deleteSkill, fetchSkillSets } from "../stores/skills";
+import { makeStyles } from "@material-ui/core/styles";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Grid from "@material-ui/core/Grid";
 
-// export default class DemoApp extends React.Component {
-//   calendarComponentRef = React.createRef();
-
-//   //CLIENT_ID = "144071191541-hneaq23ajirf343jc6s8lus3teo4c8pt.apps.googleusercontent.com";
-//   //API_KEY = "AIzaSyBtYPjPx7VhzTsKyxwxHo8t-4Br48_7EhQ";
-//   //DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
-//   //SCOPES = "https://www.googleapis.com/auth/calendar.readonly";
-
-//   state = {
-//     calendarWeekends: true,
-//     calendarEvents: [
-//       // initial event data
-//       { title: "Event!!!!!!!!", start: new Date() },
-//     ],
-//     personEvents: [],
-//     isSignedIn: null,
-//   };
-
-// componentDidMount() {
-//   window.gapi.load("client:auth2", () => {
-//     window.gapi.client
-//       .init({
-//         apiKey: "AIzaSyBtYPjPx7VhzTsKyxwxHo8t-4Br48_7EhQ",
-//         clientId: "144071191541-hneaq23ajirf343jc6s8lus3teo4c8pt.apps.googleusercontent.com",
-//         scope: "https://www.googleapis.com/auth/calendar.readonly",
-//         discoveryDocs: ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"],
-//       })
-//       .then(() => {
-//         const auth = window.gapi.auth2.getAuthInstance();
-
-//         this.setState({ isSignedIn: auth.isSignedIn.get() });
-//         this.listUpcomingEvents();
-//       });
-//   });
-// }
-
-//   loginWithGoogle = () => {
-//     window.gapi.auth2.getAuthInstance().signIn();
-//   };
-
-//   logoutFromGoogle = () => {
-//     window.gapi.auth2.getAuthInstance().signOut();
-//   };
-
-//   renderAuth() {
-//     if (this.state.isSignedIn === null) {
-//       return <div>i dont know your google account</div>;
-//     } else if (this.state.isSignedIn) {
-//       // this.listUpcomingEvents();
-//       return <div>login with google!!</div>;
-//     } else {
-//       return <div>I can not see your google account!!</div>;
-//     }
-//   }
-
-//   render() {
-//     return (
-//       <div className="demo-app">
-//         <div className="demo-app-top">
-//           {this.renderAuth()}
-//           <button onClick={this.loginWithGoogle}>login with google</button>
-//           <button onClick={this.logoutFromGoogle}>logout from google</button>
-//         </div>
-//         <div className="demo-app-calendar">
-//           <FullCalendar
-//             defaultView="resourceTimelineDay"
-//             header={{
-//               left: "prev,next today",
-//               center: "title",
-//               right: "resourceTimelineDay,dayGridMonth",
-//             }}
-//             schedulerLicenseKey="GPL-My-Project-Is-Open-Source"
-//             locale="ja"
-//             plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin]}
-//             ref={this.calendarComponentRef}
-//             weekends={this.state.calendarWeekends}
-//             events={this.state.calendarEvents}
-//             dateClick={this.handleDateClick}
-//             resourceAreaWidth="10%"
-//             resourceLabelText="アルバイト"
-//             resources={[
-//               {
-//                 id: "a",
-//                 title: "秋山",
-//               },
-//               {
-//                 id: "b",
-//                 title: "山川",
-//                 eventColor: "green",
-//               },
-//               {
-//                 id: "c",
-//                 title: "渡部",
-//                 eventColor: "orange",
-//               },
-//             ]}
-//             events={this.state.personEvents}
-//           />
-//         </div>
-//       </div>
-//     );
-//   }
-
-//   toggleWeekends = () => {
-//     this.setState({
-//       // update a property
-//       calendarWeekends: !this.state.calendarWeekends,
-//     });
-//   };
-
-//   gotoPast = () => {
-//     const calendarApi = this.calendarComponentRef.current.getApi();
-//     calendarApi.gotoDate("2000-01-01"); // call a method on the Calendar object
-//   };
-
-//   handleDateClick = (arg) => {
-//     const temp = "Would you like to add an event to " + arg.dateStr + " ?";
-//     if (confirm(temp)) {
-//       this.setState({
-//         // add new event data
-//         calendarEvents: this.state.calendarEvents.concat({
-//           // creates a new array
-//           title: "New Event",
-//           start: arg.date,
-//           allDay: arg.allDay,
-//         }),
-//       });
-//     }
-//   };
-
-//   listUpcomingEvents = () => {
-//     window.gapi.client.calendar.events
-//       .list({
-//         calendarId: "primary",
-//         timeMin: new Date().toISOString(),
-//         showDeleted: false,
-//         singleEvents: true,
-//         maxResults: 10,
-//         orderBy: "startTime",
-//       })
-//       .then((response) => {
-//         const events = response.result.items;
-
-//         if (events.length > 0) {
-//           for (let i = 0; i < events.length; i++) {
-//             const event = events[i];
-//             let startTime = event.start.dateTime;
-//             const endTime = event.end.dateTime;
-//             if (!startTime) {
-//               startTime = event.start.date;
-//             }
-//             console.log(event.summary);
-//             this.setState({
-//               calendarEvents: this.state.calendarEvents.concat({
-//                 title: event.summary,
-//                 start: startTime,
-//               }),
-//               personEvents: this.state.personEvents.concat({
-//                 resourceId: "a",
-//                 title: event.summary,
-//                 start: startTime,
-//                 end: endTime,
-//               }),
-//             });
-//           }
-//         } else {
-//           console.log("event nothing");
-//         }
-//       });
-//   };
-// }
+const useStyles = makeStyles((theme) => ({
+  demoAppCalendar: {
+    width: 800,
+  },
+  card: {
+    margin: "0px 20px 30px 20px",
+  },
+}));
 
 export default function DemoApp() {
+  const classes = useStyles();
   const calendarComponentRef = React.createRef();
 
-  const [calendarEvents, setCalendarEvnets] = React.useState({
-    title: "Event!!!!!!!!",
-    start: new Date(),
-  });
+  const [calendarEvents, setCalendarEvents] = React.useState([]);
   const [calendarWeekends, setCalendarWeekends] = React.useState(true);
   const [personEvents, setPersonEvents] = React.useState();
   const [isSignedIn, setIsSignedIn] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const members = useSelector((state) => state.members.members);
 
   const dispatch = useDispatch();
-
-  // state = {
-  //   calendarWeekends: true,
-  //   calendarEvents: [
-  //     // initial event data
-  //     { title: "Event!!!!!!!!", start: new Date() },
-  //   ],
-  //   personEvents: [],
-  //   isSignedIn: null,
-  // };
 
   const loginWithGoogle = () => {
     window.gapi.auth2.getAuthInstance().signIn();
@@ -227,41 +59,70 @@ export default function DemoApp() {
     window.gapi.client.calendar.events
       .list({
         calendarId: "primary",
-        timeMin: new Date().toISOString(),
+        // timeMin: new Date().toISOString(),
         showDeleted: false,
         singleEvents: true,
-        maxResults: 10,
+        maxResults: 250,
         orderBy: "startTime",
       })
       .then((response) => {
         const events = response.result.items;
+        console.log(events);
 
         if (events.length > 0) {
-          for (let i = 0; i < events.length; i++) {
-            const event = events[i];
-            let startTime = event.start.dateTime;
-            const endTime = event.end.dateTime;
-            if (!startTime) {
-              startTime = event.start.date;
-            }
-            console.log(event.summary);
-            setCalendarEvnets({
-              ...calendarEvents,
-              title: event.summary,
-              start: startTime,
-            });
-            setPersonEvents({
-              ...personEvents,
-              resourceId: "a",
-              title: event.summary,
-              start: startTime,
-              end: endTime,
-            });
-          }
+          let temp = calendarEvents;
+          Promise.all(
+            events.map((item, index) => {
+              return new Promise((resolve, reject) => {
+                console.log(item);
+                temp.push({
+                  id: temp.length + 1,
+                  resourceId: item.summary,
+                  title: item.summary,
+                  start: new Date(item.start.dateTime),
+                  end: new Date(item.end.dateTime),
+                });
+                resolve("ok");
+              });
+            })
+          ).then((result) => {
+            console.log(temp);
+            setCalendarEvents(temp);
+            console.log(loading);
+          });
+          // let temp = calendarEvents;
+          // for (let i = 0; i < events.length; i++) {
+          //   const event = events[i];
+          //   let startTime = event.start.dateTime;
+          //   const endTime = event.end.dateTime;
+          //   if (!startTime) {
+          //     startTime = event.start.date;
+          //   }
+          //   console.log(event.summary);
+          //   temp.push({
+          //     title: event.summary,
+          //     start: startTime,
+          //   });
+          //   console.log(temp);
+          //   // setPersonEvents({
+          //   //   ...personEvents,
+          //   //   resourceId: "a",
+          //   //   title: event.summary,
+          //   //   start: startTime,
+          //   //   end: endTime,
+          //   // });
+          // }
+          // setCalendarEvents(temp);
         } else {
           console.log("event nothing");
         }
+        setLoading(false);
       });
+  };
+
+  const handleDateClick = (arg) => {
+    // bind with an arrow function
+    calendarComponentRef.current.getApi().changeView("resourceTimelineDay", arg.dateStr);
   };
 
   useEffect(() => {
@@ -295,48 +156,72 @@ export default function DemoApp() {
     fetchData();
   }, [setIsSignedIn]);
 
-  return (
-    <div className="demo-app">
-      <div className="demo-app-top">
-        {renderAuth}
-        <button onClick={loginWithGoogle}>login with google</button>
-        <button onClick={logoutFromGoogle}>logout from google</button>
+  if (loading == true) {
+    return <p>loading...</p>;
+  } else {
+    console.log("ok");
+    return (
+      <div className="demo-app">
+        <div className="demo-app-top">
+          {renderAuth}
+          <button onClick={loginWithGoogle}>login with google</button>
+          <button onClick={logoutFromGoogle}>logout from google</button>
+        </div>
+        <div className="demoAppCalendar">
+          <Grid container alignItems="center" justify="center">
+            <Grid item>
+              <Card className={classes.card} variant="outlined">
+                <CardContent>
+                  <FullCalendar
+                    defaultView="resourceTimelineDay"
+                    header={{
+                      left: "prev,next today",
+                      center: "title",
+                      right: "resourceTimelineDay,dayGridMonth",
+                    }}
+                    schedulerLicenseKey="GPL-My-Project-Is-Open-Source"
+                    locale="ja"
+                    plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin]}
+                    ref={calendarComponentRef}
+                    weekends={calendarWeekends}
+                    events={calendarEvents}
+                    // events={[
+                    //   { id: "1", resourceId: 2, start: "2020-08-30", end: "2020-08-30", title: "event 1" },
+                    //   { id: "2", resourceId: "c", start: "2020-08-30", end: "2020-08-30", title: "event 2" },
+                    // ]}
+                    resourceAreaWidth="10%"
+                    resourceLabelText="アルバイト"
+                    // resources={[
+                    //   {
+                    //     id: 1,
+                    //     title: "秋山",
+                    //   },
+                    //   {
+                    //     id: 2,
+                    //     title: "山川",
+                    //     // eventColor: "green",
+                    //   },
+                    //   {
+                    //     id: 3,
+                    //     title: "渡部",
+                    //     // eventColor: "orange",
+                    //   },
+                    // ]}
+                    resources={members.map((member) => {
+                      return {
+                        id: member.id,
+                        title: member.name,
+                      };
+                    })}
+                    scrollTime="08:00:00" //スクロールがデフォルトで表示する位置(店舗情報で設定できるように)
+                    dateClick={handleDateClick}
+                  />
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </div>
       </div>
-      <div className="demo-app-calendar">
-        <FullCalendar
-          defaultView="resourceTimelineDay"
-          header={{
-            left: "prev,next today",
-            center: "title",
-            right: "resourceTimelineDay,dayGridMonth",
-          }}
-          schedulerLicenseKey="GPL-My-Project-Is-Open-Source"
-          locale="ja"
-          plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin, resourceTimelinePlugin]}
-          ref={calendarComponentRef}
-          weekends={calendarWeekends}
-          events={calendarEvents}
-          resourceAreaWidth="10%"
-          resourceLabelText="アルバイト"
-          resources={[
-            {
-              id: "a",
-              title: "秋山",
-            },
-            {
-              id: "b",
-              title: "山川",
-              eventColor: "green",
-            },
-            {
-              id: "c",
-              title: "渡部",
-              eventColor: "orange",
-            },
-          ]}
-          events={personEvents}
-        />
-      </div>
-    </div>
-  );
+    );
+  }
 }

@@ -11,6 +11,7 @@ import axios from "axios";
 import { addSkill } from "../stores/skills";
 import { addPersonSkill, addPerson } from "../stores/members";
 import { useSelector, useDispatch } from "react-redux";
+import { getUniqueStr } from "../modules/getUniqueStr";
 
 const useStyles = makeStyles(() => ({
   validation: {
@@ -23,12 +24,15 @@ export default function FormDialog(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
   const skills = useSelector((state) => state.skills.allSkills);
+  const busySkills = useSelector((state) => state.skills.busySkills);
+  const freeSkills = useSelector((state) => state.skills.freeSkills);
+  const members = useSelector((state) => state.members.members);
 
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState();
   const [validated, setValidated] = React.useState(false);
   const inputRef = React.useRef(null);
-  const temp = [...props.name];
+  // const temp = [...props.name];
 
   /**
    * バリデーション用state
@@ -67,37 +71,42 @@ export default function FormDialog(props) {
       if (props.id === "0") {
         // アルバイト追加処理
         try {
-          // res = await axios.post("http://localhost:3000/part-time-job-lists", {
-          //   name: inputRef.current.value,
-          //   skill: [],
-          // });
-          //dispatchでアルバイト追加
           //全スキルを取ってきてオブジェクトの作成
           let temp = {};
           skills.map((item) => {
-            temp = {...temp, [item]: false };
+            temp = { ...temp, [item.value]: false };
           });
           const obj = {
             name: inputRef.current.value,
             skill: temp,
-          }
+          };
           dispatch(addPerson(obj));
-
-          temp.push(inputRef.current.value);
-          props.onSubmit(temp);
+          res = await axios.post("http://localhost:3000/part-time-job-lists", {
+            id: getUniqueStr(),
+            name: inputRef.current.value,
+            skill: temp,
+          });
         } catch (err) {
           res = err.response;
         }
       } else if (props.id === "1") {
         // スキル追加処理
         try {
-          // res = await axios.post("http://localhost:3000/skill-lists", {
-          //   name: inputRef.current.value,
-          // });
-          temp.push(inputRef.current.value);
-          props.onSubmit(temp);
           dispatch(addSkill(inputRef.current.value));
           dispatch(addPersonSkill(inputRef.current.value));
+          res = await axios.post("http://localhost:3000/skill-lists", { value: inputRef.current.value });
+          res = await axios.post("http://localhost:3000/skill-sets", {
+            busy: { ...busySkills, [inputRef.current.value]: false },
+            free: { ...freeSkills, [inputRef.current.value]: false },
+          });
+          let temp_members = members;
+          temp_members.map((item, index) => {
+            console.log(temp_members[index].skill);
+            temp_members[index].skill = { ...temp_members[index].skill, [inputRef.current.value]: false };
+            console.log("ok");
+          });
+          console.log(temp_members);
+          res = await axios.post("http://localhost:3000/part-time-job-lists", temp_members);
         } catch (err) {
           res = err.response;
         }

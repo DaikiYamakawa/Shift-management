@@ -29,7 +29,7 @@ const slice = createSlice({
     },
     addSkill: (state, action) => {
       //全スキルに新規スキル追加
-      state.allSkills.push(action.payload);
+      state.allSkills.push({ value: action.payload });
       // スキルセットに新規スキル追加
       state.busySkills = { ...state.busySkills, [action.payload]: false };
       state.freeSkills = { ...state.freeSkills, [action.payload]: false };

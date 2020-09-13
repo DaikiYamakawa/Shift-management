@@ -47,7 +47,6 @@ const slice = createSlice({
     },
     addPersonSkill: (state, action) => {
       const label = action.payload;
-      console.log(state.members);
 
       state.members.map((item, index) => {
         state.members[index].skill = { ...state.members[index].skill, [label]: false };
